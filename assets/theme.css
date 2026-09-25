@@ -189,7 +189,7 @@ section { padding: 60px 0; }
     z-index: 2000;
     white-space: nowrap;
 }
-#copy-toast.show { opacity: 1; transform: translate(-50%, 0); }
+#copy-toast.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; cursor: pointer; }
 
 /* ---------- Footer & links ---------- */
 footer {

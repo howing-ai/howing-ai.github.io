@@ -101,6 +101,57 @@
         .role-card { height: 100%; }
         .role-card .ability { font-size: 0.88rem; color: #cbd5e1; }
         .role-card .tip { font-size: 0.8rem; color: #94a3b8; }
+
+        /* ---------- Add-a-game bar ---------- */
+        #gameNameInput {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+        #gameNameInput:focus {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(96, 165, 250, 0.5);
+            color: #e0e0e0;
+            box-shadow: none;
+        }
+        #gameNameInput::placeholder { color: #64748b; }
+        .suggest-wrap { position: relative; }
+        .suggest-box {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            margin-top: 5px;
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            border-radius: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1300;
+            display: none;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+        }
+        .suggest-box.open { display: block; }
+        .suggest-item {
+            padding: 9px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .suggest-item:last-child { border-bottom: none; }
+        .suggest-item:hover { background: rgba(96, 165, 250, 0.14); }
+        .suggest-item.taken { opacity: 0.45; cursor: default; }
+        .suggest-item.static { cursor: default; color: #94a3b8; font-size: 0.8rem; }
+        .suggest-item .si-main { font-size: 0.9rem; color: #e0e0e0; }
+        .suggest-item .si-sub { font-size: 0.72rem; color: #94a3b8; }
+        .suggest-src { font-size: 0.65rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; align-self: center; }
+        .game-remove {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.75rem;
+            padding: 2px 4px;
+            border-radius: 6px;
+            transition: color 0.2s, background 0.2s;
+        }
+        .game-remove:hover { color: #f87171; background: rgba(248, 113, 113, 0.12); }
     </style>
 </head>
 <body>
@@ -213,6 +264,32 @@
                 <p class="text-center text-muted small mt-4 mb-0" id="roleEmpty" style="display:none;">
                     Nothing in this filter yet.
                 </p>
+            </div>
+        </section>
+
+        <!-- Add a game -->
+        <section id="add-game" class="pt-0">
+            <div class="container">
+                <h2 class="section-title">Add a Game</h2>
+                <div class="card p-4 mx-auto" style="max-width: 760px;">
+                    <p class="text-muted small mb-3">
+                        Start typing and a built-in catalogue of ~35 popular games suggests matches — pick one to add it with
+                        its details filled in, or just type any name of your own. Everything is stored in this browser.
+                    </p>
+                    <div class="suggest-wrap">
+                        <input type="text" class="form-control" id="gameNameInput" placeholder="e.g. Pandemic, Carcassonne, 7 Wonders…" autocomplete="off" aria-label="Game name">
+                        <div class="suggest-box" id="gameSuggestBox"></div>
+                    </div>
+                    <button class="btn btn-primary mt-3" id="addGameBtn"><i class="bi bi-plus-lg"></i> Add to my collection</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Games added by the visitor -->
+        <section id="my-games" class="pt-0" style="display:none;">
+            <div class="container">
+                <h2 class="section-title">My Added Games</h2>
+                <div class="row g-4" id="customGameGrid"></div>
             </div>
         </section>
 
@@ -403,6 +480,33 @@
                 tip: 'Excellent for discouraging the village from voting you out.'
             },
             {
+                id: 'wolf-king',
+                name: 'Wolf King 狼王',
+                glyph: '🗡️',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'When voted out by the village during the day, may take one player down before dying.',
+                tip: 'Turns the village\'s own lynch into a weapon — the wolves can afford to sacrifice you.'
+            },
+            {
+                id: 'stone-wolf',
+                name: 'Stone Wolf 石像狼人',
+                glyph: '🗿',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'Appears as a villager ("good") whenever the Seer checks them.',
+                tip: 'The Seer\'s "safe" checks are no longer safe — poison for the village\'s trust network.'
+            },
+            {
+                id: 'demon',
+                name: 'Demon 惡魔',
+                glyph: '😈',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'Each night checks one player and learns whether that player is the Seer.',
+                tip: 'Counter-intelligence for the wolf camp — find and silence the real Seer early.'
+            },
+            {
                 id: 'seer',
                 name: 'Seer 預言家',
                 glyph: '🔮',
@@ -448,6 +552,42 @@
                 tip: 'High risk, high reward — a wrong challenge usually costs you the game.'
             },
             {
+                id: 'idiot',
+                name: 'Idiot 白痴',
+                glyph: '🤡',
+                camp: 'god',
+                status: 'none',
+                ability: 'If voted out by the village, reveals the role card and stays alive — but loses the right to vote.',
+                tip: 'A wasted lynch for the village — ideally the wolves never realise what you are.'
+            },
+            {
+                id: 'thief',
+                name: 'Thief 盜賊',
+                glyph: '🎭',
+                camp: 'god',
+                status: 'none',
+                ability: 'Before the first night, secretly chooses to swap roles with one of two extra dealt cards.',
+                tip: 'A gamble on the unknown — you could become anything from a werewolf to the Witch.'
+            },
+            {
+                id: 'elder',
+                name: 'Elder 長老',
+                glyph: '🧙',
+                camp: 'god',
+                status: 'none',
+                ability: 'Survives the first wolf attack; if the village mislynches them, all gods lose their powers.',
+                tip: 'A shield for one night and a time bomb under the village\'s coordination.'
+            },
+            {
+                id: 'dream-weaver',
+                name: 'Dream Weaver 攝夢人',
+                glyph: '💤',
+                camp: 'god',
+                status: 'none',
+                ability: 'Each night shields one player from all harm; the dreamed player cannot speak or vote the next day.',
+                tip: 'The strongest protection in the game — but never dream the same person two nights running.'
+            },
+            {
                 id: 'cupid',
                 name: 'Cupid 丘比特',
                 glyph: '💘',
@@ -455,6 +595,24 @@
                 status: 'none',
                 ability: 'On the first night links two players as lovers: if one dies, the other dies of heartbreak.',
                 tip: 'Creates a hidden third faction — the lover pair can win alone with the wolves.'
+            },
+            {
+                id: 'piper',
+                name: 'Piper 吹笛者',
+                glyph: '🎵',
+                camp: 'third',
+                status: 'none',
+                ability: 'Each night charms players with a magical flute; wins alone if every living player is charmed.',
+                tip: 'A silent clock ticking against both camps — you only need the living, not a majority.'
+            },
+            {
+                id: 'wild-child',
+                name: 'Wild Child 野孩子',
+                glyph: '🐾',
+                camp: 'third',
+                status: 'none',
+                ability: 'Idolises one player as a role model; if that player dies, the Wild Child turns into a werewolf.',
+                tip: 'A villager with a fuse — choosing a likely-to-die role model changes your whole game.'
             },
             {
                 id: 'villager',
@@ -469,6 +627,7 @@
 
         const STORE_GAMES = 'lbw.games.v1';
         const STORE_ROLES = 'lbw.roles.v1';
+        const STORE_CUSTOM_GAMES = 'lbw.games.custom.v1';
 
         /* ---------- Shared background / UX (mirrors index.html) ---------- */
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -519,13 +678,66 @@
             });
         })();
 
-        /* ---------- Small helper: browser-only storage ---------- */
+        /* ---------- Storage helpers ----------
+           localStorage is the only store on this static site, but it can be
+           blocked — Safari private mode, "block all cookies", some file://
+           setups. It used to fail silently, which looked exactly like
+           "my marks don't save". Now: probe once on load, warn visibly,
+           and keep working in-memory for the current session. */
+        const STORAGE_OK = (function () {
+            try {
+                const probe = '__lbw_probe__';
+                window.localStorage.setItem(probe, '1');
+                window.localStorage.removeItem(probe);
+                return true;
+            } catch (err) { return false; }
+        })();
+
+        function showToast(message, sticky) {
+            const toast = document.getElementById('copy-toast');
+            if (!toast) { return; }
+            toast.textContent = message;
+            toast.classList.add('show');
+            if (!sticky) {
+                clearTimeout(showToast.timer);
+                showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
+            }
+        }
+        (function initToastDismiss() {
+            const toast = document.getElementById('copy-toast');
+            if (toast) { toast.addEventListener('click', () => toast.classList.remove('show')); }
+        })();
+
         function loadState(key) {
-            try { return JSON.parse(localStorage.getItem(key) || '{}'); }
+            if (!STORAGE_OK) { return {}; }
+            try { return JSON.parse(window.localStorage.getItem(key) || '{}'); }
             catch (err) { return {}; }
         }
         function saveState(key, value) {
-            try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* storage disabled */ }
+            if (!STORAGE_OK) { showToast('Browser storage is unavailable — your marks cannot be saved between visits. Click to dismiss.', true); return; }
+            try { window.localStorage.setItem(key, JSON.stringify(value)); }
+            catch (err) { showToast('Could not save your marks (storage refused the write). Click to dismiss.', true); }
+        }
+        if (!STORAGE_OK) {
+            showToast('Browser storage is unavailable — your marks cannot be saved between visits. Click to dismiss.', true);
+        }
+
+        function esc(text) {
+            return String(text).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+        }
+
+        /* Games added by the visitor; their played/wishlist marks are stored
+           in the same status map (STORE_GAMES) as the built-in collection. */
+        let CUSTOM_GAMES = loadState(STORE_CUSTOM_GAMES);
+        if (!Array.isArray(CUSTOM_GAMES)) { CUSTOM_GAMES = []; }
+        const savedGameStatus = loadState(STORE_GAMES);
+        GAMES.forEach((g) => { if (savedGameStatus[g.id]) { g.status = savedGameStatus[g.id]; } });
+        CUSTOM_GAMES.forEach((g) => { g.status = savedGameStatus[g.id] || 'none'; });
+
+        function refreshGameStats() {
+            const all = GAMES.concat(CUSTOM_GAMES);
+            document.getElementById('statGamesPlayed').textContent = all.filter((g) => g.status === 'played').length + ' / ' + all.length;
+            document.getElementById('statGamesWish').textContent = all.filter((g) => g.status === 'wishlist').length;
         }
 
         /* Declared before the renderers run — the function below is hoisted, the binding is not. */
@@ -538,8 +750,6 @@
             const filters = document.getElementById('gameFilters');
             if (!grid) { return; }
 
-            const saved = loadState(STORE_GAMES);
-            GAMES.forEach((g) => { if (saved[g.id]) { g.status = saved[g.id]; } });
             let filter = 'all';
 
             function statusBadge(status) {
@@ -578,11 +788,7 @@
                 observeReveals();
             }
 
-            function updateStats() {
-                const played = GAMES.filter((g) => g.status === 'played');
-                document.getElementById('statGamesPlayed').textContent = played.length + ' / ' + GAMES.length;
-                document.getElementById('statGamesWish').textContent = GAMES.filter((g) => g.status === 'wishlist').length;
-            }
+            function updateStats() { refreshGameStats(); }
 
             grid.addEventListener('click', (e) => {
                 const btn = e.target.closest('[data-mark]');
@@ -675,12 +881,220 @@
             render();
         })();
 
-        /* ---------- Reset ---------- */
+        /* =====================================================================
+           Built-in suggestion catalogue for the "Add a game" bar.
+           No API key needed — this ships with the page. (There is no free,
+           CORS-enabled board-game database, so the catalogue is embedded.)
+           ===================================================================== */
+        const GAME_CATALOG = [
+            { id: 'cat-7-wonders', name: '7 Wonders (七大奇蹟)', glyph: '🏛️', category: 'Card Drafting', players: '3–7', time: '30 min', difficulty: 'Medium', desc: 'Draft cards across three ages to build the strongest ancient civilisation.' },
+            { id: 'cat-carcassonne', name: 'Carcassonne (卡卡頌)', glyph: '🏰', category: 'Tile Laying', players: '2–5', time: '35 min', difficulty: 'Light', desc: 'Draw and place tiles to build medieval cities, roads and farms.' },
+            { id: 'cat-dominion', name: 'Dominion (皇輿爭霸)', glyph: '👑', category: 'Deck Building', players: '2–4', time: '30 min', difficulty: 'Medium', desc: 'The original deck-builder — buy better cards to power your engine.' },
+            { id: 'cat-pandemic', name: 'Pandemic (瘟疫危機)', glyph: '🦠', category: 'Co-operative', players: '2–4', time: '45 min', difficulty: 'Medium', desc: 'Work together to cure four diseases before outbreaks spiral out of control.' },
+            { id: 'cat-forbidden-island', name: 'Forbidden Island (禁忌之島)', glyph: '🏝️', category: 'Co-operative', players: '2–4', time: '30 min', difficulty: 'Light', desc: 'Grab the treasures and escape a sinking island — pure co-op tension.' },
+            { id: 'cat-wingspan', name: 'Wingspan (展翅翱翔)', glyph: '🐦', category: 'Engine Building', players: '1–5', time: '60 min', difficulty: 'Medium', desc: 'Attract birds with food and habitats — gorgeous and surprisingly strategic.' },
+            { id: 'cat-love-letter', name: 'Love Letter (情書)', glyph: '💌', category: 'Deduction', players: '2–4', time: '20 min', difficulty: 'Light', desc: 'A pocket-sized bluffing duel for influence at the royal court.' },
+            { id: 'cat-saboteur', name: 'Saboteur (矮人礦坑)', glyph: '⛏️', category: 'Hidden Role', players: '3–10', time: '30 min', difficulty: 'Light', desc: 'Diggers hunt gold while saboteurs secretly collapse their tunnels.' },
+            { id: 'cat-secret-hitler', name: 'Secret Hitler', glyph: '🎩', category: 'Social Deduction', players: '5–10', time: '45 min', difficulty: 'Medium', desc: 'Liberals vs fascists in a voting game of trust and legislation.' },
+            { id: 'cat-resistance', name: 'The Resistance (抵抗組織)', glyph: '✊', category: 'Social Deduction', players: '5–10', time: '30 min', difficulty: 'Light', desc: 'Mission success or sabotage — a pure deduction classic with no player elimination.' },
+            { id: 'cat-spyfall', name: 'Spyfall (誰是臥底)', glyph: '🕵️', category: 'Party / Deduction', players: '3–8', time: '15 min', difficulty: 'Light', desc: 'Everyone knows the location except the spy — or find out who the spy is.' },
+            { id: 'cat-blood-clocktower', name: 'Blood on the Clocktower (血染鐘樓)', glyph: '🕰️', category: 'Social Deduction', players: '5–20', time: '60 min', difficulty: 'Medium', desc: 'A haunted village where the dead still get a vote — the deepest deduction game around.' },
+            { id: 'cat-bang', name: 'Bang! (砰！六響槍)', glyph: '🤠', category: 'Hidden Role / Cards', players: '4–7', time: '30 min', difficulty: 'Light', desc: 'Wild-west hidden roles: sheriff, outlaws and a renegade.' },
+            { id: 'cat-citadels', name: 'Citadels (富饒之城)', glyph: '🏯', category: 'Role Selection', players: '2–7', time: '60 min', difficulty: 'Medium', desc: 'Draft characters each round — and assassinate your rivals.' },
+            { id: 'cat-munchkin', name: 'Munchkin (小白世紀)', glyph: '🗡️', category: 'Party / Card', players: '3–6', time: '90 min', difficulty: 'Light', desc: 'Backstab your friends on the way to level 10.' },
+            { id: 'cat-king-of-tokyo', name: 'King of Tokyo (東京之王)', glyph: '🦖', category: 'Dice', players: '2–6', time: '30 min', difficulty: 'Light', desc: 'Giant monsters rolling dice for energy and victory points.' },
+            { id: 'cat-camel-up', name: 'Camel Up (駱駝大賽)', glyph: '🐪', category: 'Betting', players: '3–8', time: '30 min', difficulty: 'Light', desc: 'Bet on a chaotic camel race — camel stacks included.' },
+            { id: 'cat-sushi-go', name: 'Sushi Go! (壽司接力)', glyph: '🍣', category: 'Card Drafting', players: '2–5', time: '15 min', difficulty: 'Light', desc: 'Pass hands of cute sushi cards and score the best combos.' },
+            { id: 'cat-hanabi', name: 'Hanabi (花火)', glyph: '🎆', category: 'Co-operative', players: '2–5', time: '25 min', difficulty: 'Medium', desc: 'Co-op fireworks — while holding your cards facing away from you.' },
+            { id: 'cat-the-mind', name: 'The Mind (心靈同心)', glyph: '🧠', category: 'Party', players: '2–4', time: '20 min', difficulty: 'Light', desc: 'Play 1–100 in order without speaking. Deceptively simple.' },
+            { id: 'cat-just-one', name: 'Just One (只要一個)', glyph: '✍️', category: 'Party / Word', players: '3–7', time: '20 min', difficulty: 'Light', desc: 'Write one-word clues; identical clues cancel out.' },
+            { id: 'cat-telestrations', name: 'Telestrations (傳話畫)', glyph: '🖍️', category: 'Party / Drawing', players: '4–8', time: '30 min', difficulty: 'Light', desc: 'Telephone meets doodling — guaranteed laughter.' },
+            { id: 'cat-chess', name: 'Chess (國際象棋)', glyph: '♟️', category: 'Classic Abstract', players: '2', time: '30–90 min', difficulty: 'Heavy', desc: 'The eternal duel of pure strategy — 1,500 years young.' },
+            { id: 'cat-chinese-chess', name: 'Chinese Chess (象棋)', glyph: '♟️', category: 'Classic Abstract', players: '2', time: '30–60 min', difficulty: 'Medium', desc: 'Siege warfare with cannons and palace walls.' },
+            { id: 'cat-go', name: 'Go (圍棋)', glyph: '⚫', category: 'Abstract Strategy', players: '2', time: '20–90 min', difficulty: 'Heavy', desc: 'A handful of rules, a lifetime of depth — the oldest board game on Earth.' },
+            { id: 'cat-stratego', name: 'Stratego (戰略陣棋)', glyph: '🎖️', category: 'Hidden Setup', players: '2', time: '45 min', difficulty: 'Medium', desc: 'Blind-army chess — ranks, bombs and a single flag.' },
+            { id: 'cat-risk', name: 'Risk (戰國風雲)', glyph: '🌍', category: 'Area Control', players: '2–6', time: '120 min', difficulty: 'Medium', desc: 'World conquest through dice and broken friendships.' },
+            { id: 'cat-cluedo', name: 'Cluedo (妙探尋兇)', glyph: '🔎', category: 'Deduction', players: '3–6', time: '45 min', difficulty: 'Light', desc: 'Who, where, with what — the classic murder mystery.' },
+            { id: 'cat-scotland-yard', name: 'Scotland Yard (蘇格蘭場)', glyph: '🚨', category: 'Hidden Movement', players: '3–6', time: '45 min', difficulty: 'Light', desc: 'The whole table hunts one invisible Mr. X across London.' },
+            { id: 'cat-terraforming-mars', name: 'Terraforming Mars (火星改造)', glyph: '🔴', category: 'Engine Building', players: '1–5', time: '120 min', difficulty: 'Heavy', desc: 'Corporations raise the temperature, oceans and oxygen of Mars.' },
+            { id: 'cat-root', name: 'Root (茂林源記)', glyph: '🦫', category: 'Asymmetric Strategy', players: '2–4', time: '90 min', difficulty: 'Heavy', desc: 'Cute woodland animals, asymmetric warfare and real table politics.' },
+            { id: 'cat-machi-koro', name: 'Machi Koro (骰子街)', glyph: '🎲', category: 'Dice / City Building', players: '2–4', time: '30 min', difficulty: 'Light', desc: 'Roll dice to grow your town — simple, snappy, addictive.' },
+            { id: 'cat-century-spice', name: 'Century: Spice Road (世紀：香料之路)', glyph: '🌶️', category: 'Engine Building', players: '2–5', time: '45 min', difficulty: 'Light', desc: 'Trade cubes, fulfil orders and keep the engine humming.' },
+            { id: 'cat-yahtzee', name: 'Yahtzee (快艇骰子)', glyph: '🎲', category: 'Dice Classic', players: '2–10', time: '30 min', difficulty: 'Light', desc: 'Five dice, three rolls, poker-style scoring.' }
+        ];
+
+        /* ---------- Add-a-game bar with live suggestions ---------- */
+        (function initCustomGames() {
+            const input = document.getElementById('gameNameInput');
+            const box = document.getElementById('gameSuggestBox');
+            const grid = document.getElementById('customGameGrid');
+            const section = document.getElementById('my-games');
+            const addBtn = document.getElementById('addGameBtn');
+            if (!input || !box || !grid || !addBtn) { return; }
+
+            let picks = [];
+
+            function stripStatus(list) {
+                return list.map((g) => { const copy = { ...g }; delete copy.status; return copy; });
+            }
+
+            function statusBadge(status) {
+                if (status === 'played') { return '<span class="status-badge played"><i class="bi bi-check-circle-fill"></i> Played</span>'; }
+                if (status === 'wishlist') { return '<span class="status-badge wishlist"><i class="bi bi-star-fill"></i> Wishlist</span>'; }
+                return '<span class="status-badge none">Not marked</span>';
+            }
+
+            function gameCard(g) {
+                return `
+                    <div class="col-md-6 col-xl-4 reveal">
+                        <div class="card p-4 game-card" data-game="${g.id}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="glyph">${g.glyph}</div>
+                                <div class="d-flex align-items-center gap-2">
+                                    ${statusBadge(g.status)}
+                                    <button class="game-remove" data-remove="${g.id}" aria-label="Remove this game"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                            <h5 class="text-info mb-1">${esc(g.name)}</h5>
+                            <div class="game-meta">
+                                <span><i class="bi bi-tag"></i> ${esc(g.category)}</span>
+                                <span><i class="bi bi-people"></i> ${esc(g.players)}</span>
+                                <span><i class="bi bi-clock"></i> ${esc(g.time)}</span>
+                                <span><i class="bi bi-bar-chart"></i> ${esc(g.difficulty)}</span>
+                            </div>
+                            <p class="game-desc mb-3">${esc(g.desc)}</p>
+                            <div class="d-flex gap-2">
+                                <button class="mark-btn ${g.status === 'played' ? 'on' : ''}" data-mark="played">Played</button>
+                                <button class="mark-btn gold ${g.status === 'wishlist' ? 'on' : ''}" data-mark="wishlist">Wishlist</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function renderCustom() {
+                grid.innerHTML = CUSTOM_GAMES.map(gameCard).join('');
+                if (section) { section.style.display = CUSTOM_GAMES.length ? 'block' : 'none'; }
+                refreshGameStats();
+                observeReveals();
+            }
+
+            function addGame(data) {
+                const name = (data.name || '').trim();
+                if (!name) { input.focus(); return; }
+                const clash = GAMES.concat(CUSTOM_GAMES).some((g) => g.name.toLowerCase() === name.toLowerCase());
+                if (clash) { showToast('"' + name + '" is already on the list.'); return; }
+                CUSTOM_GAMES.push({
+                    id: 'custom-' + Date.now(),
+                    name: name,
+                    glyph: data.glyph || '🎲',
+                    category: data.category || 'My addition',
+                    players: data.players || '2–6',
+                    time: data.time || '30–60 min',
+                    difficulty: data.difficulty || '—',
+                    status: 'none',
+                    desc: data.desc || 'A game I added myself.'
+                });
+                saveState(STORE_CUSTOM_GAMES, stripStatus(CUSTOM_GAMES));
+                renderCustom();
+                showToast('Added: ' + name);
+            }
+
+            function renderSuggestions() {
+                const q = input.value.trim().toLowerCase();
+                picks = [];
+                if (!q) { box.classList.remove('open'); box.innerHTML = ''; return; }
+                const have = new Set(GAMES.concat(CUSTOM_GAMES).map((g) => g.name.toLowerCase()));
+                const rank = (g) => (have.has(g.name.toLowerCase()) ? 2 : 0) + (g.name.toLowerCase().startsWith(q) ? 0 : 1);
+                const scored = GAME_CATALOG
+                    .filter((g) => g.name.toLowerCase().includes(q))
+                    .sort((a, b) => rank(a) - rank(b))
+                    .slice(0, 8);
+                if (!scored.length) {
+                    box.innerHTML = '<div class="suggest-item static">No catalogue match — press “Add to my collection” to use this name anyway.</div>';
+                    box.classList.add('open');
+                    return;
+                }
+                picks = scored.map((g) => ({ ...g, taken: have.has(g.name.toLowerCase()) }));
+                box.innerHTML = picks.map((g, i) => `
+                    <div class="suggest-item ${g.taken ? 'taken' : ''}" data-pick="${i}">
+                        <div>
+                            <div class="si-main">${g.glyph} ${esc(g.name)}</div>
+                            <div class="si-sub">${esc(g.category)} · ${esc(g.players)} players · ${esc(g.time)}</div>
+                        </div>
+                        <span class="suggest-src">${g.taken ? 'on your list' : 'catalogue'}</span>
+                    </div>
+                `).join('');
+                box.classList.add('open');
+            }
+
+            box.addEventListener('mousedown', (e) => {
+                const item = e.target.closest('.suggest-item[data-pick]');
+                if (!item) { return; }
+                e.preventDefault();
+                const pick = picks[parseInt(item.dataset.pick, 10)];
+                if (!pick) { return; }
+                if (pick.taken) { showToast('Already on your list.'); return; }
+                input.value = '';
+                box.classList.remove('open');
+                addGame(pick);
+            });
+
+            input.addEventListener('input', renderSuggestions);
+            input.addEventListener('blur', () => setTimeout(() => box.classList.remove('open'), 160));
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const pick = picks.find((g) => !g.taken);
+                    input.value = '';
+                    box.classList.remove('open');
+                    if (pick) { addGame(pick); } else { addFreeText(); }
+                }
+                if (e.key === 'Escape') { box.classList.remove('open'); }
+            });
+
+            function addFreeText() {
+                const name = input.value.trim();
+                if (!name) { input.focus(); return; }
+                input.value = '';
+                addGame({ name: name });
+            }
+            addBtn.addEventListener('click', addFreeText);
+
+            grid.addEventListener('click', (e) => {
+                const remove = e.target.closest('[data-remove]');
+                if (remove) {
+                    CUSTOM_GAMES = CUSTOM_GAMES.filter((g) => g.id !== remove.dataset.remove);
+                    saveState(STORE_CUSTOM_GAMES, stripStatus(CUSTOM_GAMES));
+                    renderCustom();
+                    return;
+                }
+                const btn = e.target.closest('[data-mark]');
+                if (!btn) { return; }
+                const card = btn.closest('[data-game]');
+                const game = CUSTOM_GAMES.find((g) => g.id === card.dataset.game);
+                if (!game) { return; }
+                const next = btn.dataset.mark;
+                game.status = (game.status === next) ? 'none' : next;
+                const map = {};
+                GAMES.concat(CUSTOM_GAMES).forEach((g) => { map[g.id] = g.status; });
+                saveState(STORE_GAMES, map);
+                renderCustom();
+            });
+
+            renderCustom();
+        })();
+
+        /* ---------- Reset (asks first — an accidental click used to wipe everything) ---------- */
         document.getElementById('resetAllBtn').addEventListener('click', () => {
+            const ok = window.confirm('Reset every mark on this page — played, wishlist and Werewolf roles?\nGames you added yourself are kept.');
+            if (!ok) { return; }
             GAMES.forEach((g) => { g.status = (g.id === 'werewolf') ? 'played' : 'none'; });
+            CUSTOM_GAMES.forEach((g) => { g.status = 'none'; });
             ROLES.forEach((r) => { r.played = false; });
             saveState(STORE_GAMES, {});
             saveState(STORE_ROLES, {});
+            saveState(STORE_CUSTOM_GAMES, CUSTOM_GAMES.map((g) => { const copy = { ...g }; delete copy.status; return copy; }));
             location.reload();
         });
 

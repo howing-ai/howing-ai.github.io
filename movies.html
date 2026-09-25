@@ -126,6 +126,58 @@
         .stat-pill.done strong { color: #34d399; }
 
         .empty-note { text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 2rem 0; }
+
+        /* ---------- Add-film suggestions ---------- */
+        .suggest-box {
+            position: absolute;
+            top: 100%; left: 0; right: 0;
+            margin-top: 5px;
+            background: rgba(15, 23, 42, 0.98);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            border-radius: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+            z-index: 1300;
+            display: none;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.5);
+        }
+        .suggest-box.open { display: block; }
+        .suggest-item {
+            padding: 9px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .suggest-item:last-child { border-bottom: none; }
+        .suggest-item:hover { background: rgba(96, 165, 250, 0.14); }
+        .suggest-item.taken { opacity: 0.45; cursor: default; }
+        .suggest-item.static { cursor: default; color: #94a3b8; font-size: 0.8rem; }
+        .suggest-item .si-main { font-size: 0.9rem; color: #e0e0e0; }
+        .suggest-item .si-sub { font-size: 0.72rem; color: #94a3b8; }
+        .suggest-src { font-size: 0.65rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 0.05em; white-space: nowrap; align-self: center; }
+        .movie-remove {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.8rem;
+            padding: 2px 5px;
+            margin-left: 0.5rem;
+            border-radius: 6px;
+            flex: 0 0 auto;
+            transition: color 0.2s, background 0.2s;
+        }
+        .movie-remove:hover { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+        #customTitle, #customYear, #tmdbKeyInput {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+        }
+        #customTitle:focus, #customYear:focus, #tmdbKeyInput:focus {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(96, 165, 250, 0.5);
+            color: #e0e0e0;
+            box-shadow: none;
+        }
+        summary { color: #94a3b8; }
     </style>
 </head>
 <body>
@@ -208,10 +260,11 @@
             <div class="container">
                 <div class="card p-4">
                     <h4 class="text-info mb-2"><i class="bi bi-plus-circle"></i> Add a film of your own</h4>
-                    <p class="text-muted small">Anything not on the list — it is stored locally and appears in “My own list”.</p>
+                    <p class="text-muted small">Start typing — matches from this list and a built-in catalogue appear instantly. With a free TMDB API key (optional), live results from The Movie Database are included too.</p>
                     <div class="row g-3">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" id="customTitle" placeholder="Title, e.g. Blade Runner 2049" aria-label="Custom movie title">
+                        <div class="col-md-6 position-relative">
+                            <input type="text" class="form-control" id="customTitle" placeholder="e.g. Blade Runner, Alien, Star Wars…" autocomplete="off" aria-label="Custom movie title">
+                            <div class="suggest-box" id="movieSuggestBox"></div>
                         </div>
                         <div class="col-md-3">
                             <input type="number" class="form-control" id="customYear" placeholder="Year" min="1900" max="2100" aria-label="Custom movie year">
@@ -220,6 +273,21 @@
                             <button class="btn btn-primary w-100" id="addCustomBtn"><i class="bi bi-plus-lg"></i> Add film</button>
                         </div>
                     </div>
+                    <details class="mt-3">
+                        <summary><i class="bi bi-key"></i> Optional: connect TMDB for live search</summary>
+                        <div class="row g-2 mt-2 align-items-center">
+                            <div class="col-md-8">
+                                <input type="password" class="form-control form-control-sm" id="tmdbKeyInput" placeholder="Paste your free TMDB API key (v3)" aria-label="TMDB API key">
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-outline-primary btn-sm w-100" id="tmdbKeySave">Save key</button>
+                            </div>
+                        </div>
+                        <p class="text-muted small mt-2 mb-0">
+                            The key stays in this browser and is only used to fetch live title suggestions —
+                            the built-in catalogue needs no key at all.
+                        </p>
+                    </details>
                 </div>
             </div>
         </section>
@@ -321,6 +389,59 @@
         const STORE_WATCHED = 'lbw.movies.watched.v1';
         const STORE_CUSTOM = 'lbw.movies.custom.v1';
 
+        /* =====================================================================
+           Built-in suggestion catalogue for the "Add a film" bar.
+           No API key needed — this ships with the page. A free TMDB key can
+           optionally extend it with live results (see the details panel).
+           ===================================================================== */
+        const MOVIE_CATALOG = [
+            { title: '2001: A Space Odyssey', year: 1968, runtime: 149, note: 'The monolith and HAL 9000 — where modern science-fiction cinema begins.' },
+            { title: 'Blade Runner', year: 1982, runtime: 117, note: 'Do androids dream? Neon, rain, and one of cinema\'s great endings.' },
+            { title: 'Alien', year: 1979, runtime: 117, note: '"In space no one can hear you scream" — a haunted house in orbit.' },
+            { title: 'Aliens', year: 1986, runtime: 137, note: 'The sequel that turned horror into all-out war.' },
+            { title: 'The Terminator', year: 1984, runtime: 107, note: 'A cyborg assassin and the birth of a franchise.' },
+            { title: 'Terminator 2: Judgment Day', year: 1991, runtime: 137, note: 'The rare sequel that surpasses its original.' },
+            { title: 'Back to the Future', year: 1985, runtime: 116, note: 'Time travel in a DeLorean — a perfect screenplay.' },
+            { title: 'Star Wars: A New Hope', year: 1977, runtime: 121, note: 'The hero\'s journey that defined the blockbuster.' },
+            { title: 'Star Wars: The Empire Strikes Back', year: 1980, runtime: 124, note: '"I am your father" — the best middle chapter ever made.' },
+            { title: 'Star Wars: Return of the Jedi', year: 1983, runtime: 131, note: 'The trilogy\'s finale on Endor.' },
+            { title: 'Rogue One: A Star Wars Story', year: 2016, runtime: 133, note: 'The suicide mission that stole the Death Star plans.' },
+            { title: 'WALL·E', year: 2008, runtime: 98, note: 'A trash robot\'s love story — Pixar\'s finest hour.' },
+            { title: 'E.T. the Extra-Terrestrial', year: 1982, runtime: 115, note: 'A boy and his alien — Spielberg\'s tenderest film.' },
+            { title: 'Jurassic Park', year: 1993, runtime: 127, note: 'Dinosaurs walk again — a landmark of effects and dread.' },
+            { title: 'Independence Day', year: 1996, runtime: 145, note: 'Huge, cheesy, irresistible alien-invasion spectacle.' },
+            { title: 'Total Recall', year: 1990, runtime: 113, note: '"Get your ass to Mars" — reality-bending Verhoeven mayhem.' },
+            { title: 'Minority Report', year: 2002, runtime: 145, note: 'Precogs, precrime, and one of Spielberg\'s darkest worlds.' },
+            { title: 'Her', year: 2013, runtime: 126, note: 'Falling in love with an operating system — quietly prophetic.' },
+            { title: 'Looper', year: 2012, runtime: 119, note: 'Time-travel hitmen and a loop that must be closed.' },
+            { title: 'Source Code', year: 2011, runtime: 93, note: 'Eight minutes, again and again, on a doomed train.' },
+            { title: 'Edge of Tomorrow', year: 2014, runtime: 113, note: 'Die. Repeat. Win — possibly the best sci-fi action loop.' },
+            { title: 'District 9', year: 2009, runtime: 112, note: 'Alien apartheid in Johannesburg — a mockumentary with teeth.' },
+            { title: 'Annihilation', year: 2018, runtime: 115, note: 'A shimmering zone where nature rewrites you.' },
+            { title: 'Passengers', year: 2016, runtime: 116, note: 'Waking alone on a colony ship — and a terrible choice.' },
+            { title: 'Ad Astra', year: 2019, runtime: 132, note: 'A quiet journey to Neptune, and to a father.' },
+            { title: 'Oblivion', year: 2013, runtime: 124, note: 'A ravaged Earth, a repair drone and a big twist.' },
+            { title: 'Avatar', year: 2009, runtime: 162, note: 'Pandora — the film that reset 3D cinema.' },
+            { title: 'Star Trek', year: 2009, runtime: 127, note: 'The Kelvin-timeline reboot with real charisma.' },
+            { title: 'Moon', year: 2009, runtime: 97, note: 'One man, one lunar station, one impossible twist.' },
+            { title: 'Gattaca', year: 1997, runtime: 106, note: 'Genetic determinism vs human will — elegant and underrated.' },
+            { title: 'Children of Men', year: 2006, runtime: 109, note: 'A world without children, and one pregnant hope.' },
+            { title: 'The Fifth Element', year: 1997, runtime: 126, note: '"Leeloo Dallas multipass" — operatic sci-fi comedy.' },
+            { title: 'Batman Begins', year: 2005, runtime: 140, note: 'Fear as a weapon — the origin of the Dark Knight trilogy.' },
+            { title: 'The Dark Knight Rises', year: 2012, runtime: 164, note: 'Bane breaks the Bat in Nolan\'s finale.' },
+            { title: 'Joker', year: 2019, runtime: 122, note: 'A character study wearing a comic-book mask.' },
+            { title: 'Spider-Man 2', year: 2004, runtime: 127, note: 'Still the gold standard of superhero sequels.' },
+            { title: 'X-Men: Days of Future Past', year: 2014, runtime: 132, note: 'Time travel fixes a broken timeline — and mostly succeeds.' },
+            { title: 'X2: X-Men United', year: 2003, runtime: 134, note: 'The mutant allegory sharpens.' },
+            { title: 'V for Vendetta', year: 2005, runtime: 132, note: 'Remember, remember the fifth of November.' },
+            { title: 'Hellboy', year: 2004, runtime: 122, note: 'Ron Perlman\'s demon with a soft heart.' },
+            { title: 'Venom', year: 2018, runtime: 112, note: 'A chaotic symbiote bromance.' },
+            { title: 'The Incredibles', year: 2004, runtime: 115, note: 'Quietly the best Fantastic Four film ever made.' },
+            { title: 'Big Hero 6', year: 2014, runtime: 102, note: 'Baymax — the most huggable healthcare robot.' },
+            { title: 'Unbreakable', year: 2000, runtime: 106, note: 'M. Night\'s quiet, melancholy superhero origin.' },
+            { title: 'Megamind', year: 2010, runtime: 96, note: 'The villain-turned-hero comedy nobody expected to love.' }
+        ];
+
         /* ---------- Background / UX (mirrors the rest of the site) ---------- */
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         const isTouchDevice = !window.matchMedia('(pointer: fine)').matches;
@@ -372,15 +493,52 @@
             });
         })();
 
-        /* ---------- Storage helpers ---------- */
-        function loadJSON(key, fallback) {
+        /* ---------- Storage helpers ----------
+           localStorage can be blocked (Safari private mode, "block all
+           cookies", some file:// setups). It used to fail silently, which
+           looked like "my ticks don't save". Probe once and warn visibly. */
+        const STORAGE_OK = (function () {
             try {
-                const raw = localStorage.getItem(key);
+                const probe = '__lbw_probe__';
+                window.localStorage.setItem(probe, '1');
+                window.localStorage.removeItem(probe);
+                return true;
+            } catch (err) { return false; }
+        })();
+
+        function showToast(message, sticky) {
+            const toast = document.getElementById('copy-toast');
+            if (!toast) { return; }
+            toast.textContent = message;
+            toast.classList.add('show');
+            if (!sticky) {
+                clearTimeout(showToast.timer);
+                showToast.timer = setTimeout(() => toast.classList.remove('show'), 2600);
+            }
+        }
+        (function initToastDismiss() {
+            const toast = document.getElementById('copy-toast');
+            if (toast) { toast.addEventListener('click', () => toast.classList.remove('show')); }
+        })();
+
+        function loadJSON(key, fallback) {
+            if (!STORAGE_OK) { return fallback; }
+            try {
+                const raw = window.localStorage.getItem(key);
                 return raw ? JSON.parse(raw) : fallback;
             } catch (err) { return fallback; }
         }
         function saveJSON(key, value) {
-            try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* storage disabled */ }
+            if (!STORAGE_OK) { showToast('Browser storage is unavailable — your marks cannot be saved between visits. Click to dismiss.', true); return; }
+            try { window.localStorage.setItem(key, JSON.stringify(value)); }
+            catch (err) { showToast('Could not save your marks (storage refused the write). Click to dismiss.', true); }
+        }
+        if (!STORAGE_OK) {
+            showToast('Browser storage is unavailable — your marks cannot be saved between visits. Click to dismiss.', true);
+        }
+
+        function esc(text) {
+            return String(text).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
         }
 
         /* ---------- Watch list ---------- */
@@ -444,15 +602,16 @@
                                     <label class="movie-row ${watched[m.id] ? 'watched' : ''}" for="chk-${m.id}">
                                         <input type="checkbox" id="chk-${m.id}" data-movie="${m.id}" ${watched[m.id] ? 'checked' : ''}>
                                         <span class="flex-grow-1">
-                                            <span class="movie-title d-block">${m.title}</span>
+                                            <span class="movie-title d-block">${esc(m.title)}</span>
                                             <span class="movie-meta">
                                                 <span><i class="bi bi-calendar3"></i> ${m.year}</span>
                                                 ${m.runtime ? `<span><i class="bi bi-clock"></i> ${m.runtime} min</span>` : ''}
                                                 ${m.id.startsWith('custom-') ? '<span><i class="bi bi-person-plus"></i> my list</span>' : ''}
                                             </span>
-                                            ${m.note ? `<span class="movie-note d-block">${m.note}</span>` : ''}
+                                            ${m.note ? `<span class="movie-note d-block">${esc(m.note)}</span>` : ''}
                                             ${watched[m.id] ? `<span class="watched-stamp d-block"><i class="bi bi-check-circle-fill"></i> watched${formatStamp(watched[m.id]) ? ' on ' + formatStamp(watched[m.id]) : ''}</span>` : ''}
                                         </span>
+                                        ${m.id.startsWith('custom-') ? `<button class="movie-remove" data-remove="${m.id}" aria-label="Remove this film"><i class="bi bi-x-lg"></i></button>` : ''}
                                     </label>
                                 </div>
                             `).join('')}
@@ -487,6 +646,18 @@
             });
 
             groupsEl.addEventListener('click', (e) => {
+                const remove = e.target.closest('[data-remove]');
+                if (remove) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const id = remove.dataset.remove;
+                    custom = custom.filter((m) => m.id !== id);
+                    delete watched[id];
+                    saveJSON(STORE_CUSTOM, custom);
+                    saveJSON(STORE_WATCHED, watched);
+                    render();
+                    return;
+                }
                 const btn = e.target.closest('[data-bulk]');
                 if (!btn) { return; }
                 e.preventDefault();
@@ -519,26 +690,129 @@
                 render();
             });
 
-            document.getElementById('addCustomBtn').addEventListener('click', () => {
-                const titleEl = document.getElementById('customTitle');
-                const yearEl = document.getElementById('customYear');
-                const title = titleEl.value.trim();
+            /* ---------- Add-a-film bar: catalogue + optional TMDB live search ---------- */
+            const titleEl = document.getElementById('customTitle');
+            const yearEl = document.getElementById('customYear');
+            const suggestBox = document.getElementById('movieSuggestBox');
+            const tmdbKeyEl = document.getElementById('tmdbKeyInput');
+            const STORE_TMDB = 'lbw.tmdb.key.v1';
+            let TMDB_KEY = loadJSON(STORE_TMDB, '');
+            if (TMDB_KEY && tmdbKeyEl) { tmdbKeyEl.value = TMDB_KEY; }
+            let picks = [];
+            let tmdbTimer = null;
+
+            function addMovie(data) {
+                const title = (data.title || '').trim();
                 if (!title) { titleEl.focus(); return; }
+                const clash = allMovies().some((m) => m.title.toLowerCase() === title.toLowerCase());
+                if (clash) { showToast('"' + title + '" is already on your list.'); return; }
                 custom.push({
                     id: 'custom-' + Date.now(),
                     title: title,
-                    year: yearEl.value ? parseInt(yearEl.value, 10) : '',
-                    runtime: null,
-                    note: ''
+                    year: data.year || (yearEl.value ? parseInt(yearEl.value, 10) : ''),
+                    runtime: data.runtime || null,
+                    note: data.note || ''
                 });
                 saveJSON(STORE_CUSTOM, custom);
                 titleEl.value = '';
                 yearEl.value = '';
                 render();
+                showToast('Added: ' + title);
+            }
+
+            function hideSuggest() { suggestBox.classList.remove('open'); }
+
+            function renderSuggestions() {
+                const q = titleEl.value.trim().toLowerCase();
+                picks = [];
+                clearTimeout(tmdbTimer);
+                if (!q) { hideSuggest(); suggestBox.innerHTML = ''; return; }
+
+                const have = new Set(allMovies().map((m) => m.title.toLowerCase()));
+                const rank = (m) => (have.has(m.title.toLowerCase()) ? 2 : 0) + (m.title.toLowerCase().startsWith(q) ? 0 : 1);
+                const local = allMovies()
+                    .map((m) => ({ title: m.title, year: m.year, runtime: m.runtime, note: m.note, source: 'on your list', taken: true }))
+                    .concat(MOVIE_CATALOG.map((m) => ({ ...m, source: 'catalogue', taken: false })))
+                    .filter((m) => m.title.toLowerCase().includes(q))
+                    .sort((a, b) => rank(a) - rank(b))
+                    .slice(0, 8);
+
+                if (!local.length) {
+                    suggestBox.innerHTML = '<div class="suggest-item static">No match yet — press “Add film” to use this title anyway.</div>';
+                } else {
+                    picks = local.map((m) => ({ ...m, taken: m.taken || have.has(m.title.toLowerCase()) }));
+                    suggestBox.innerHTML = picks.map((m, i) => `
+                        <div class="suggest-item ${m.taken ? 'taken' : ''}" data-pick="${i}">
+                            <div>
+                                <div class="si-main">${esc(m.title)}</div>
+                                <div class="si-sub">${m.year || '—'}${m.runtime ? ' · ' + m.runtime + ' min' : ''}</div>
+                            </div>
+                            <span class="suggest-src">${m.taken ? 'on your list' : m.source}</span>
+                        </div>
+                    `).join('');
+                }
+                suggestBox.classList.add('open');
+
+                /* Optional live results from The Movie Database (free key, CORS-friendly) */
+                if (TMDB_KEY) {
+                    tmdbTimer = setTimeout(() => {
+                        fetch('https://api.themoviedb.org/3/search/movie?api_key=' + encodeURIComponent(TMDB_KEY) + '&query=' + encodeURIComponent(q) + '&include_adult=false')
+                            .then((res) => (res.ok ? res.json() : Promise.reject(new Error('HTTP ' + res.status))))
+                            .then((data) => {
+                                const fresh = (data.results || [])
+                                    .map((r) => ({ title: r.title, year: (r.release_date || '').slice(0, 4) || '', runtime: null, note: '', source: 'TMDB', taken: false }))
+                                    .filter((m) => m.title && !have.has(m.title.toLowerCase()) && !picks.some((p) => p.title.toLowerCase() === m.title.toLowerCase()))
+                                    .slice(0, 4);
+                                if (!fresh.length) { return; }
+                                const startIndex = picks.length;
+                                picks = picks.concat(fresh);
+                                const frag = document.createElement('div');
+                                frag.innerHTML = fresh.map((m, i) => `
+                                    <div class="suggest-item" data-pick="${startIndex + i}">
+                                        <div>
+                                            <div class="si-main">${esc(m.title)}</div>
+                                            <div class="si-sub">${m.year || '—'}</div>
+                                        </div>
+                                        <span class="suggest-src">${m.source}</span>
+                                    </div>
+                                `).join('');
+                                while (frag.firstChild) { suggestBox.appendChild(frag.firstChild); }
+                                suggestBox.classList.add('open');
+                            })
+                            .catch(() => { /* key invalid or offline — the built-in catalogue still works */ });
+                    }, 450);
+                }
+            }
+
+            suggestBox.addEventListener('mousedown', (e) => {
+                const item = e.target.closest('.suggest-item[data-pick]');
+                if (!item) { return; }
+                e.preventDefault();
+                const pick = picks[parseInt(item.dataset.pick, 10)];
+                if (!pick) { return; }
+                if (pick.taken) { showToast('Already on your list.'); return; }
+                hideSuggest();
+                addMovie(pick);
             });
 
-            document.getElementById('customTitle').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') { document.getElementById('addCustomBtn').click(); }
+            titleEl.addEventListener('input', renderSuggestions);
+            titleEl.addEventListener('blur', () => setTimeout(hideSuggest, 160));
+            titleEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const pick = picks.find((p) => !p.taken);
+                    hideSuggest();
+                    if (pick) { addMovie(pick); } else { addMovie({ title: titleEl.value }); }
+                }
+                if (e.key === 'Escape') { hideSuggest(); }
+            });
+
+            document.getElementById('addCustomBtn').addEventListener('click', () => addMovie({ title: titleEl.value }));
+
+            document.getElementById('tmdbKeySave').addEventListener('click', () => {
+                TMDB_KEY = (tmdbKeyEl.value || '').trim();
+                saveJSON(STORE_TMDB, TMDB_KEY);
+                showToast(TMDB_KEY ? 'TMDB key saved — live suggestions enabled.' : 'TMDB key cleared — using the built-in catalogue only.');
             });
 
             render();
