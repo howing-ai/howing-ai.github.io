@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board Games &amp; Werewolf — Li Ho Wing (Rain)</title>
+    <meta name="description" content="The board games Li Ho Wing (Rain) plays, and every Werewolf (狼人殺) role played — with camps, abilities and difficulty.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" href="assets/profile.png">
+    <link rel="apple-touch-icon" href="assets/profile.png">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="assets/theme.css" rel="stylesheet">
+
+    <style>
+        .stat-tile {
+            text-align: center;
+            padding: 1.25rem 1rem;
+        }
+        .stat-tile .num {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1.1;
+        }
+        .stat-tile .lbl {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #94a3b8;
+            margin-top: 0.35rem;
+        }
+
+        .filter-bar .btn {
+            border-radius: 20px;
+            font-size: 0.85rem;
+            padding: 0.3rem 1rem;
+        }
+
+        .game-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .game-card .glyph {
+            font-size: 1.75rem;
+            line-height: 1;
+            margin-bottom: 0.6rem;
+        }
+        .game-card h5 { font-size: 1.05rem; }
+        .game-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem 0.9rem;
+            font-size: 0.78rem;
+            color: #94a3b8;
+            margin: 0.6rem 0;
+        }
+        .game-meta span { display: inline-flex; align-items: center; gap: 0.3rem; }
+        .game-desc { font-size: 0.88rem; color: #cbd5e1; flex: 1; }
+
+        .status-badge {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            border: 1px solid transparent;
+        }
+        .status-badge.played {
+            color: #34d399;
+            background: rgba(52, 211, 153, 0.12);
+            border-color: rgba(52, 211, 153, 0.35);
+        }
+        .status-badge.wishlist {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.12);
+            border-color: rgba(251, 191, 36, 0.35);
+        }
+        .status-badge.none {
+            color: #94a3b8;
+            background: rgba(148, 163, 184, 0.1);
+            border-color: rgba(148, 163, 184, 0.25);
+        }
+
+        .camp-tag {
+            font-size: 0.72rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .camp-wolf { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+        .camp-good { color: #60a5fa; background: rgba(96, 165, 250, 0.12); }
+        .camp-god  { color: #a78bfa; background: rgba(167, 139, 250, 0.12); }
+        .camp-third { color: #fbbf24; background: rgba(251, 191, 36, 0.12); }
+
+        .role-card { height: 100%; }
+        .role-card .ability { font-size: 0.88rem; color: #cbd5e1; }
+        .role-card .tip { font-size: 0.8rem; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="cursor-glow"></div>
+
+    <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold" href="index.html">Li Ho Wing (Rain)</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html#achievements">Awards</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="board-games.html">Board Games</a></li>
+                        <li class="nav-item"><a class="nav-link" href="movies.html">Movies</a></li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <a class="btn btn-outline-primary btn-sm" href="index.html#contact"><i class="bi bi-envelope"></i> Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <header class="page-header">
+            <div class="container">
+                <a class="back-link" href="index.html#interests"><i class="bi bi-arrow-left"></i> Back to Interests &amp; Hobbies</a>
+                <h1 class="fw-bold mb-3" style="font-size: 2.5rem;">Board Games &amp; Werewolf</h1>
+                <p class="mx-auto text-muted" style="max-width: 680px;">
+                    Tabletop games I play, and every character I have taken on in
+                    <strong class="text-white">Werewolf (狼人殺)</strong>. Mark what you want to track —
+                    your choices are stored in this browser only.
+                </p>
+            </div>
+        </header>
+
+        <section class="pt-0">
+            <div class="container">
+                <div class="row g-4 mb-4">
+                    <div class="col-6 col-lg-3">
+                        <div class="card stat-tile">
+                            <div class="num" id="statGamesPlayed">0</div>
+                            <div class="lbl">Games played</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card stat-tile">
+                            <div class="num" id="statGamesWish">0</div>
+                            <div class="lbl">On my wishlist</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card stat-tile">
+                            <div class="num" id="statRolesPlayed">0</div>
+                            <div class="lbl">Werewolf roles played</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3">
+                        <div class="card stat-tile">
+                            <div class="num" id="statRolesTotal">0</div>
+                            <div class="lbl">Roles discovered</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                    <button class="mark-btn" id="resetAllBtn"><i class="bi bi-arrow-counterclockwise"></i> Reset all marks</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Board games -->
+        <section id="games" class="pt-0">
+            <div class="container">
+                <h2 class="section-title">Tabletop Collection</h2>
+                <div class="d-flex justify-content-center flex-wrap gap-2 mb-4 filter-bar" id="gameFilters">
+                    <button class="btn btn-outline-primary active" data-filter="all">All</button>
+                    <button class="btn btn-outline-primary" data-filter="played">Played</button>
+                    <button class="btn btn-outline-primary" data-filter="wishlist">Wishlist</button>
+                    <button class="btn btn-outline-primary" data-filter="none">Not marked</button>
+                </div>
+                <div class="row g-4" id="gameGrid"></div>
+                <p class="text-center text-muted small mt-4 mb-0" id="gameEmpty" style="display:none;">
+                    Nothing in this filter yet — switch the filter or mark a game below.
+                </p>
+            </div>
+        </section>
+
+        <!-- Werewolf roles -->
+        <section id="werewolf" class="pt-0">
+            <div class="container">
+                <h2 class="section-title">Werewolf (狼人殺) Characters</h2>
+                <p class="text-center text-muted small mb-4" style="margin-top: -1.5rem;">
+                    Standard role set — click <em>Played</em> on the ones you have actually taken, and it becomes part of your profile.
+                </p>
+                <div class="d-flex justify-content-center flex-wrap gap-2 mb-4 filter-bar" id="roleFilters">
+                    <button class="btn btn-outline-primary active" data-filter="all">All camps</button>
+                    <button class="btn btn-outline-primary" data-filter="wolf">Wolf camp</button>
+                    <button class="btn btn-outline-primary" data-filter="god">Village gods</button>
+                    <button class="btn btn-outline-primary" data-filter="good">Villagers</button>
+                    <button class="btn btn-outline-primary" data-filter="third">Third party</button>
+                    <button class="btn btn-outline-primary" data-filter="played">Played</button>
+                </div>
+                <div class="row g-4" id="roleGrid"></div>
+                <p class="text-center text-muted small mt-4 mb-0" id="roleEmpty" style="display:none;">
+                    Nothing in this filter yet.
+                </p>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p class="mb-2"><a href="index.html#interests"><i class="bi bi-arrow-left"></i> Back to the portfolio</a></p>
+                <p class="mb-0 text-muted small">© 2026 Li Ho Wing (Rain). All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+    <div id="copy-toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+    <script>
+        /* =====================================================================
+           EDIT ME — add / remove board games here.
+           status: 'played' (already played) | 'wishlist' (want to play) | 'none'
+           ===================================================================== */
+        const GAMES = [
+            {
+                id: 'werewolf',
+                name: 'Werewolf (狼人殺)',
+                glyph: '🐺',
+                category: 'Social Deduction',
+                players: '6–18',
+                time: '20–40 min',
+                difficulty: 'Medium',
+                status: 'played',
+                desc: 'Hidden-role deduction where the village hunts the wolves by day and the wolves strike by night. My all-time favourite — bluffing, reading tone, and building a believable narrative.'
+            },
+            {
+                id: 'avalon',
+                name: 'Avalon (阿瓦隆)',
+                glyph: '⚔️',
+                category: 'Social Deduction',
+                players: '5–10',
+                time: '30 min',
+                difficulty: 'Medium',
+                status: 'none',
+                desc: 'Merlin knows the traitors but must stay hidden. Team selection plus voting makes every round an information puzzle.'
+            },
+            {
+                id: 'coup',
+                name: 'Coup (政變)',
+                glyph: '🃏',
+                category: 'Bluffing',
+                players: '2–6',
+                time: '15 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'Fast bluffing card game — you may claim any role, but anyone can challenge you and one of you loses an influence.'
+            },
+            {
+                id: 'sanguosha',
+                name: 'Sanguosha (三國殺)',
+                glyph: '🏯',
+                category: 'Card Battle',
+                players: '3–8',
+                time: '30–60 min',
+                difficulty: 'Heavy',
+                status: 'none',
+                desc: 'Three Kingdoms themed card battle with a hidden lord, loyalists and rebels. Rich character skills and lots of table politics.'
+            },
+            {
+                id: 'catan',
+                name: 'Catan (卡坦島)',
+                glyph: '🌾',
+                category: 'Strategy / Euro',
+                players: '3–4',
+                time: '60–90 min',
+                difficulty: 'Medium',
+                status: 'none',
+                desc: 'Settle, trade and build on a hex island. The trading table is where the real game happens.'
+            },
+            {
+                id: 'codenames',
+                name: 'Codenames (機密代號)',
+                glyph: '🕵️',
+                category: 'Party / Word',
+                players: '4–8',
+                time: '15 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'Spymasters give one-word clues linking several words on the board — a great warm-up game for mixed groups.'
+            },
+            {
+                id: 'dixit',
+                name: 'Dixit (妙語說書人)',
+                glyph: '🎨',
+                category: 'Party / Storytelling',
+                players: '3–6',
+                time: '30 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'Dreamlike artwork and a clue that must be neither too obvious nor too obscure. Pure imagination with zero number crunching.'
+            },
+            {
+                id: 'splendor',
+                name: 'Splendor (璀璨寶石)',
+                glyph: '💎',
+                category: 'Engine Building',
+                players: '2–4',
+                time: '30 min',
+                difficulty: 'Medium',
+                status: 'none',
+                desc: 'Collect gem tokens, buy development cards and build an efficient engine. Very satisfying combo turns.'
+            },
+            {
+                id: 'ticket-to-ride',
+                name: 'Ticket to Ride (鐵道任務)',
+                glyph: '🚂',
+                category: 'Strategy',
+                players: '2–5',
+                time: '60 min',
+                difficulty: 'Medium',
+                status: 'none',
+                desc: 'Claim railway routes and connect your destination tickets. Simple rules, real decisions about blocking opponents.'
+            },
+            {
+                id: 'exploding-kittens',
+                name: 'Exploding Kittens',
+                glyph: '💥',
+                category: 'Party / Card',
+                players: '2–5',
+                time: '15 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'Draw cards, dodge the exploding kitten. Chaotic, quick and endlessly quotable.'
+            },
+            {
+                id: 'monopoly',
+                name: 'Monopoly (大富翁)',
+                glyph: '🎩',
+                category: 'Classic',
+                players: '2–8',
+                time: '60–180 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'The classic property trading game — nostalgia value, plus a brutal lesson in negotiation and patience.'
+            },
+            {
+                id: 'uno',
+                name: 'UNO',
+                glyph: '🔢',
+                category: 'Party / Card',
+                players: '2–10',
+                time: '15 min',
+                difficulty: 'Light',
+                status: 'none',
+                desc: 'Colour matching with action cards. Best played with a house rule of stacking +2 and +4 draws.'
+            }
+        ];
+
+        /* =====================================================================
+           EDIT ME — Werewolf role set.
+           camp: 'wolf' | 'god' (village god) | 'good' (ordinary villager) | 'third'
+           ===================================================================== */
+        const ROLES = [
+            {
+                id: 'werewolf',
+                name: 'Werewolf 狼人',
+                glyph: '🐺',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'Each night the wolves agree on a player to kill. By day they must act like villagers.',
+                tip: 'Strength: numbers and shared information. Weakness: any slip in voting pattern exposes the pack.'
+            },
+            {
+                id: 'white-wolf-king',
+                name: 'White Wolf King 白狼王',
+                glyph: '👑',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'Once per game, while still alive, may self-destruct during the day to take one player down with them.',
+                tip: 'A one-shot sniper — best saved for the Seer or a confirmed village leader.'
+            },
+            {
+                id: 'wolf-beauty',
+                name: 'Wolf Beauty 狼美人',
+                glyph: '🌹',
+                camp: 'wolf',
+                status: 'none',
+                ability: 'May charm one player; if the Wolf Beauty dies, the charmed player dies too.',
+                tip: 'Excellent for discouraging the village from voting you out.'
+            },
+            {
+                id: 'seer',
+                name: 'Seer 預言家',
+                glyph: '🔮',
+                camp: 'god',
+                status: 'none',
+                ability: 'Every night checks one player and learns whether they are a wolf.',
+                tip: 'The village\'s information engine — how you reveal your results decides the whole game.'
+            },
+            {
+                id: 'witch',
+                name: 'Witch 女巫',
+                glyph: '⚗️',
+                camp: 'god',
+                status: 'none',
+                ability: 'Holds one antidote to save the night\'s victim and one poison to kill a player — usually one use each.',
+                tip: 'Timing matters more than power: save the antidote for a confirmed important role.'
+            },
+            {
+                id: 'hunter',
+                name: 'Hunter 獵人',
+                glyph: '🏹',
+                camp: 'god',
+                status: 'none',
+                ability: 'When eliminated, may shoot one player immediately (unless killed by the witch\'s poison in some rulesets).',
+                tip: 'Your threat alone changes how wolves vote — use it as leverage before you die.'
+            },
+            {
+                id: 'guard',
+                name: 'Guard 守衛',
+                glyph: '🛡️',
+                camp: 'god',
+                status: 'none',
+                ability: 'Protects one player each night; cannot protect the same player on consecutive nights.',
+                tip: 'Coordinate with the witch so the two protective powers do not overlap.'
+            },
+            {
+                id: 'knight',
+                name: 'Knight 騎士',
+                glyph: '⚔️',
+                camp: 'god',
+                status: 'none',
+                ability: 'May challenge one player during the day; if that player is a wolf, the wolf dies instantly.',
+                tip: 'High risk, high reward — a wrong challenge usually costs you the game.'
+            },
+            {
+                id: 'cupid',
+                name: 'Cupid 丘比特',
+                glyph: '💘',
+                camp: 'third',
+                status: 'none',
+                ability: 'On the first night links two players as lovers: if one dies, the other dies of heartbreak.',
+                tip: 'Creates a hidden third faction — the lover pair can win alone with the wolves.'
+            },
+            {
+                id: 'villager',
+                name: 'Villager 平民',
+                glyph: '🧑‍🌾',
+                camp: 'good',
+                status: 'none',
+                ability: 'No night action — only your voice, your vote and your read on people.',
+                tip: 'Never underestimate it: a convincing villager decides who gets lynched.'
+            }
+        ];
+
+        const STORE_GAMES = 'lbw.games.v1';
+        const STORE_ROLES = 'lbw.roles.v1';
+
+        /* ---------- Shared background / UX (mirrors index.html) ---------- */
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isTouchDevice = !window.matchMedia('(pointer: fine)').matches;
+        const isSmallScreen = window.innerWidth < 768;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof particlesJS !== 'function') { return; }
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": isSmallScreen ? 32 : 70, "density": { "enable": true, "value_area": isSmallScreen ? 500 : 800 } },
+                    "color": { "value": "#60a5fa" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.4, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": !isSmallScreen, "distance": 150, "color": "#60a5fa", "opacity": 0.2, "width": 1 },
+                    "move": { "enable": true, "speed": isSmallScreen ? 1 : 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+                },
+                "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": !isTouchDevice, "mode": "repulse" }, "resize": true } },
+                "retina_detect": true
+            });
+        });
+
+        (function initCursorGlow() {
+            const glow = document.getElementById('cursor-glow');
+            if (!glow || isTouchDevice || prefersReducedMotion) { return; }
+            let tx = window.innerWidth / 2, ty = window.innerHeight / 2, cx = tx, cy = ty;
+            window.addEventListener('mousemove', (e) => {
+                tx = e.clientX; ty = e.clientY; glow.style.opacity = '1';
+            }, { passive: true });
+            document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+            (function animate() {
+                cx += (tx - cx) * 0.12;
+                cy += (ty - cy) * 0.12;
+                glow.style.transform = 'translate(' + cx + 'px, ' + cy + 'px)';
+                requestAnimationFrame(animate);
+            })();
+        })();
+
+        (function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) { return; }
+            window.addEventListener('scroll', () => {
+                btn.classList.toggle('show', window.scrollY > 400);
+            }, { passive: true });
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            });
+        })();
+
+        /* ---------- Small helper: browser-only storage ---------- */
+        function loadState(key) {
+            try { return JSON.parse(localStorage.getItem(key) || '{}'); }
+            catch (err) { return {}; }
+        }
+        function saveState(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* storage disabled */ }
+        }
+
+        /* Declared before the renderers run — the function below is hoisted, the binding is not. */
+        let revealObserver = null;
+
+        /* ---------- Board games ---------- */
+        (function initGames() {
+            const grid = document.getElementById('gameGrid');
+            const emptyNote = document.getElementById('gameEmpty');
+            const filters = document.getElementById('gameFilters');
+            if (!grid) { return; }
+
+            const saved = loadState(STORE_GAMES);
+            GAMES.forEach((g) => { if (saved[g.id]) { g.status = saved[g.id]; } });
+            let filter = 'all';
+
+            function statusBadge(status) {
+                if (status === 'played') { return '<span class="status-badge played"><i class="bi bi-check-circle-fill"></i> Played</span>'; }
+                if (status === 'wishlist') { return '<span class="status-badge wishlist"><i class="bi bi-star-fill"></i> Wishlist</span>'; }
+                return '<span class="status-badge none">Not marked</span>';
+            }
+
+            function render() {
+                const visible = GAMES.filter((g) => filter === 'all' || g.status === filter);
+                grid.innerHTML = visible.map((g) => `
+                    <div class="col-md-6 col-xl-4 reveal">
+                        <div class="card p-4 game-card" data-game="${g.id}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="glyph">${g.glyph}</div>
+                                ${statusBadge(g.status)}
+                            </div>
+                            <h5 class="text-info mb-1">${g.name}</h5>
+                            <div class="game-meta">
+                                <span><i class="bi bi-tag"></i> ${g.category}</span>
+                                <span><i class="bi bi-people"></i> ${g.players}</span>
+                                <span><i class="bi bi-clock"></i> ${g.time}</span>
+                                <span><i class="bi bi-bar-chart"></i> ${g.difficulty}</span>
+                            </div>
+                            <p class="game-desc mb-3">${g.desc}</p>
+                            <div class="d-flex gap-2">
+                                <button class="mark-btn ${g.status === 'played' ? 'on' : ''}" data-mark="played">Played</button>
+                                <button class="mark-btn gold ${g.status === 'wishlist' ? 'on' : ''}" data-mark="wishlist">Wishlist</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                emptyNote.style.display = visible.length ? 'none' : 'block';
+                updateStats();
+                observeReveals();
+            }
+
+            function updateStats() {
+                const played = GAMES.filter((g) => g.status === 'played');
+                document.getElementById('statGamesPlayed').textContent = played.length + ' / ' + GAMES.length;
+                document.getElementById('statGamesWish').textContent = GAMES.filter((g) => g.status === 'wishlist').length;
+            }
+
+            grid.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-mark]');
+                if (!btn) { return; }
+                const card = btn.closest('[data-game]');
+                const game = GAMES.find((g) => g.id === card.dataset.game);
+                const next = btn.dataset.mark;
+                game.status = (game.status === next) ? 'none' : next;
+                saveState(STORE_GAMES, GAMES.reduce((acc, g) => { acc[g.id] = g.status; return acc; }, {}));
+                render();
+            });
+
+            filters.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-filter]');
+                if (!btn) { return; }
+                filter = btn.dataset.filter;
+                filters.querySelectorAll('.btn').forEach((b) => b.classList.toggle('active', b === btn));
+                render();
+            });
+
+            render();
+        })();
+
+        /* ---------- Werewolf roles ---------- */
+        (function initRoles() {
+            const grid = document.getElementById('roleGrid');
+            const emptyNote = document.getElementById('roleEmpty');
+            const filters = document.getElementById('roleFilters');
+            if (!grid) { return; }
+
+            const saved = loadState(STORE_ROLES);
+            ROLES.forEach((r) => {
+                r.played = (saved[r.id] === undefined) ? (r.status === 'played') : saved[r.id] === true;
+            });
+
+            let filter = 'all';
+            const CAMP_LABEL = { wolf: 'Wolf camp', god: 'Village god', good: 'Villager', third: 'Third party' };
+            const CAMP_CLASS = { wolf: 'camp-wolf', god: 'camp-god', good: 'camp-good', third: 'camp-third' };
+
+            function render() {
+                const visible = ROLES.filter((r) => {
+                    if (filter === 'all') { return true; }
+                    if (filter === 'played') { return r.played; }
+                    return r.camp === filter;
+                });
+
+                grid.innerHTML = visible.map((r) => `
+                    <div class="col-md-6 col-xl-4 reveal">
+                        <div class="card p-4 role-card" data-role="${r.id}">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div class="glyph fs-3">${r.glyph}</div>
+                                <span class="camp-tag ${CAMP_CLASS[r.camp]}">${CAMP_LABEL[r.camp]}</span>
+                            </div>
+                            <h5 class="text-info mb-2">${r.name}</h5>
+                            <p class="ability mb-2">${r.ability}</p>
+                            <p class="tip mb-3"><i class="bi bi-lightbulb"></i> ${r.tip}</p>
+                            <button class="mark-btn ${r.played ? 'on' : ''}" data-played>${r.played ? '<i class="bi bi-check-circle-fill"></i> Played' : 'Mark as played'}</button>
+                        </div>
+                    </div>
+                `).join('');
+
+                emptyNote.style.display = visible.length ? 'none' : 'block';
+                updateStats();
+                observeReveals();
+            }
+
+            function updateStats() {
+                document.getElementById('statRolesPlayed').textContent = ROLES.filter((r) => r.played).length + ' / ' + ROLES.length;
+                document.getElementById('statRolesTotal').textContent = ROLES.length;
+            }
+
+            grid.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-played]');
+                if (!btn) { return; }
+                const card = btn.closest('[data-role]');
+                const role = ROLES.find((r) => r.id === card.dataset.role);
+                role.played = !role.played;
+                saveState(STORE_ROLES, ROLES.reduce((acc, r) => { acc[r.id] = r.played; return acc; }, {}));
+                render();
+            });
+
+            filters.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-filter]');
+                if (!btn) { return; }
+                filter = btn.dataset.filter;
+                filters.querySelectorAll('.btn').forEach((b) => b.classList.toggle('active', b === btn));
+                render();
+            });
+
+            render();
+        })();
+
+        /* ---------- Reset ---------- */
+        document.getElementById('resetAllBtn').addEventListener('click', () => {
+            GAMES.forEach((g) => { g.status = (g.id === 'werewolf') ? 'played' : 'none'; });
+            ROLES.forEach((r) => { r.played = false; });
+            saveState(STORE_GAMES, {});
+            saveState(STORE_ROLES, {});
+            location.reload();
+        });
+
+        /* ---------- Scroll reveal ---------- */
+        function observeReveals() {
+            const targets = document.querySelectorAll('.reveal:not(.visible)');
+            if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+                targets.forEach((el) => el.classList.add('visible'));
+                return;
+            }
+            if (!revealObserver) {
+                revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+            }
+            targets.forEach((el) => revealObserver.observe(el));
+        }
+    </script>
+</body>
+</html>

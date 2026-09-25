@@ -395,6 +395,136 @@
             overflow-y: auto;
         }
 
+        /* ---------- ABFYE award highlight ---------- */
+        .abfye-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.1rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.45);
+            box-shadow: 0 0 24px rgba(251, 191, 36, 0.18);
+            transition: all 0.3s;
+        }
+        .abfye-badge:hover {
+            text-decoration: none;
+            color: #0f172a;
+            background: #fbbf24;
+            transform: translateY(-2px);
+            box-shadow: 0 0 32px rgba(251, 191, 36, 0.45);
+        }
+        .abfye-feature {
+            border-color: rgba(251, 191, 36, 0.35) !important;
+            background: linear-gradient(135deg, rgba(251, 191, 36, 0.09) 0%, rgba(30, 41, 59, 0.6) 55%) !important;
+        }
+        .abfye-feature:hover { border-color: rgba(251, 191, 36, 0.6) !important; }
+        .abfye-logo {
+            width: 130px;
+            height: auto;
+            flex: 0 0 auto;
+            padding: 10px;
+            border-radius: 14px;
+            background: #ffffff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        /* ---------- Interest cards as links ---------- */
+        .interest-card {
+            display: block;
+            text-decoration: none !important;
+        }
+        .interest-card h5 { transition: color 0.25s; }
+        .interest-card:hover h5 { color: var(--accent) !important; }
+        .interest-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        .interest-link i { transition: transform 0.25s; }
+        .interest-card:hover .interest-link i { transform: translateX(4px); }
+
+        /* ---------- CV Builder toolbar ---------- */
+        .cv-toolbar { background: rgba(15, 23, 42, 0.6); }
+        .cv-swatch {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            padding: 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .cv-swatch:hover { transform: scale(1.12); }
+        .cv-swatch.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.45);
+        }
+        #cv-preview-wrap {
+            --cv-accent: #2563eb;
+            --cv-scale: 1;
+        }
+        #cv-content-target { font-size: calc(1rem * var(--cv-scale)); }
+        #cv-content-target h2,
+        #cv-content-target h5.text-secondary {
+            color: var(--cv-accent) !important;
+        }
+        #cv-content-target h5.text-secondary {
+            border-bottom-color: var(--cv-accent) !important;
+        }
+        /* Templates */
+        .cv-template-modern #cv-content-target {
+            border-left: 8px solid var(--cv-accent);
+            border-radius: 0 8px 8px 0;
+        }
+        .cv-template-modern #cv-content-target h2 {
+            letter-spacing: -0.02em;
+        }
+        .cv-template-compact #cv-content-target {
+            padding: 18px;
+            line-height: 1.4;
+        }
+        .cv-template-compact #cv-content-target h5 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+        .cv-template-compact #cv-content-target .mb-3 { margin-bottom: 0.75rem !important; }
+        .cv-template-compact #cv-content-target p { margin-bottom: 0.3rem !important; }
+        /* Inline editing */
+        #cv-content-target[contenteditable="true"] :is(h2, h5, p) {
+            outline: 1px dashed rgba(37, 99, 235, 0.4);
+            border-radius: 3px;
+        }
+        #cv-content-target[contenteditable="true"] :is(h2, h5, p):focus {
+            outline: 2px solid rgba(37, 99, 235, 0.8);
+            background: rgba(37, 99, 235, 0.06);
+        }
+        /* Section list with reorder buttons */
+        .cv-section-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 8px;
+        }
+        .cv-section-row:hover { background: rgba(96, 165, 250, 0.07); }
+        .cv-order-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            padding: 0 0.3rem;
+            line-height: 1;
+            transition: color 0.2s;
+        }
+        .cv-order-btn:hover { color: var(--accent); }
+
         /* ---------- Mobile refinements ---------- */
         @media (max-width: 991.98px) {
             .navbar-collapse {
@@ -435,6 +565,8 @@
             }
             #copy-toast.show { transform: translateY(0); }
             .cv-preview-box { padding: 18px; }
+            .abfye-logo { width: 96px; }
+            .abfye-badge { font-size: 0.82rem; padding: 0.45rem 0.9rem; }
         }
 
         /* ---------- Respect reduced motion ---------- */
@@ -492,7 +624,13 @@
                     <img src="assets/profile.png" alt="Li Ho Wing (Rain)" onerror="this.style.display='none'; this.parentElement.classList.add('profile-img-fallback');">
                 </div>
                 <h1>Li Ho Wing <span class="text-muted fs-4">(Rain)</span></h1>
-                <p class="lead text-info fw-semibold mb-2">Interdisciplinary STEM Undergraduate @ HKUST</p>
+                <p class="lead text-info fw-semibold mb-3">Interdisciplinary STEM Undergraduate @ HKUST</p>
+                <p class="mb-3">
+                    <a class="abfye-badge" href="https://abfye.hkust.edu.hk/news/abfye_10a_logo_challenge-results" target="_blank" rel="noopener">
+                        <i class="bi bi-trophy-fill"></i>
+                        Winner — ABFYE 10th Anniversary AI Logo Challenge (University Division)
+                    </a>
+                </p>
                 <p class="text-muted mb-4">Born: January 30, 2007</p>
                 <p class="mx-auto" style="max-width: 700px;">Passionate about data-driven system design, full-stack prototyping, cybersecurity, and solving real-world challenges through creative engineering.</p>
                 <div class="mt-4 hero-actions d-flex flex-wrap justify-content-center gap-3">
@@ -804,6 +942,30 @@
             <div class="container">
                 <h2 class="section-title">Awards &amp; Credentials</h2>
                 <div class="row g-4">
+                    <!-- Headline achievement -->
+                    <div class="col-12 reveal">
+                        <div class="card p-4 abfye-feature">
+                            <div class="d-flex flex-column flex-md-row gap-4 align-items-md-center">
+                                <img src="assets/abfye10-logo.png" alt="ABFYE 10th Anniversary logo designed by Li Ho Wing (Rain)" class="abfye-logo">
+                                <div>
+                                    <span class="badge bg-warning text-dark mb-2"><i class="bi bi-trophy-fill"></i> Winner · University Division</span>
+                                    <h4 class="text-warning mb-2">ABFYE 10th Anniversary AI Logo Challenge</h4>
+                                    <p class="text-muted small mb-2">
+                                        Academy for Bright Future Young Engineers (ABFYE), HKUST ·
+                                        Results announced 18 May 2026 · Award ceremony 11 July 2026
+                                    </p>
+                                    <p class="text-white small mb-3">
+                                        Selected as the <strong>Winner of the University Division</strong>.
+                                        The 10th-anniversary logo I designed was adopted by the organiser for the anniversary
+                                        branding and featured across the official results announcement and award-ceremony materials.
+                                    </p>
+                                    <a href="https://abfye.hkust.edu.hk/news/abfye_10a_logo_challenge-results" target="_blank" rel="noopener" class="small">
+                                        Official results announcement <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-lg-6 reveal">
                         <div class="card h-100 p-4 achievement-card">
                             <div class="achievement-icon gold"><i class="bi bi-trophy"></i></div>
@@ -821,16 +983,6 @@
                                 <h5 class="text-info mb-1">PolyU Engineering Project Competition</h5>
                                 <p class="text-muted small mb-2">EMG-controlled Spider Bot</p>
                                 <p class="text-white small mb-0">Designed and built a bio-signal driven robot, integrating EMG sensors with motor and gear actuation mechanisms.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 reveal">
-                        <div class="card h-100 p-4 achievement-card">
-                            <div class="achievement-icon"><i class="bi bi-palette"></i></div>
-                            <div>
-                                <h5 class="text-info mb-1">ABFYE 10th Anniversary Competition</h5>
-                                <p class="text-muted small mb-2">Design Submission</p>
-                                <p class="text-white small mb-0">Submitted a full visual identity package (SVG / CMYK PDF / PNG) for the ABFYE 10th Anniversary competition.</p>
                             </div>
                         </div>
                     </div>
@@ -874,27 +1026,8 @@
                 <h2 class="section-title">Work &amp; Leadership Experience</h2>
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
+                        <p class="text-center text-muted small mb-4" style="margin-top: -1.5rem;">Oldest to newest, top to bottom.</p>
                         <div class="timeline">
-                            <div class="timeline-item reveal">
-                                <div class="card p-4">
-                                    <div class="d-flex justify-content-between flex-wrap mb-2">
-                                        <h5 class="text-info mb-0">Financial Secretary</h5>
-                                        <span class="text-muted small">2025 – Present</span>
-                                    </div>
-                                    <p class="text-white mb-2"><strong>Integrated Systems and Design Student Society, HKUST</strong></p>
-                                    <p class="text-muted small mb-0">Managing organizational accounts, budgeting for student activities, and collaborating on faculty-student communications.</p>
-                                </div>
-                            </div>
-                            <div class="timeline-item reveal">
-                                <div class="card p-4">
-                                    <div class="d-flex justify-content-between flex-wrap mb-2">
-                                        <h5 class="text-info mb-0">BSc in Integrative Systems and Design</h5>
-                                        <span class="text-muted small">2025 – 2029</span>
-                                    </div>
-                                    <p class="text-white mb-2"><strong>Hong Kong University of Science and Technology</strong></p>
-                                    <p class="text-muted small mb-0">Interdisciplinary curriculum spanning design methodology, systems thinking, prototyping and engineering fundamentals.</p>
-                                </div>
-                            </div>
                             <div class="timeline-item reveal">
                                 <div class="card p-4">
                                     <div class="d-flex justify-content-between flex-wrap mb-2">
@@ -915,6 +1048,26 @@
                                     <p class="text-muted small mb-0">Completed secondary education with a focus on ICT and STEM subjects, including an ICT School-Based Assessment database project.</p>
                                 </div>
                             </div>
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">BSc in Integrative Systems and Design</h5>
+                                        <span class="text-muted small">2025 – 2029</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>Hong Kong University of Science and Technology</strong></p>
+                                    <p class="text-muted small mb-0">Interdisciplinary curriculum spanning design methodology, systems thinking, prototyping and engineering fundamentals.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">Financial Secretary</h5>
+                                        <span class="text-muted small">2025 – Present</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>Integrated Systems and Design Student Society, HKUST</strong></p>
+                                    <p class="text-muted small mb-0">Managing organizational accounts, budgeting for student activities, and collaborating on faculty-student communications.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -925,20 +1078,23 @@
         <section id="interests">
             <div class="container">
                 <h2 class="section-title">Interests &amp; Hobbies</h2>
+                <p class="text-center text-muted small mb-4" style="margin-top: -2rem;">Two dedicated pages — click a card to open it.</p>
                 <div class="row g-4 justify-content-center">
                     <div class="col-md-5 reveal">
-                        <div class="card h-100 p-4 text-center">
+                        <a class="card h-100 p-4 text-center interest-card" href="board-games.html">
                             <div class="text-info fs-2 mb-2"><i class="bi bi-dice-5"></i></div>
-                            <h5>Board Games</h5>
-                            <p class="text-muted small mb-0">Enthusiast of strategic tabletop games, with a particular passion for social deduction games like <strong>Werewolf (狼人殺)</strong>.</p>
-                        </div>
+                            <h5 class="text-white">Board Games</h5>
+                            <p class="text-muted small mb-3">Enthusiast of strategic tabletop games, with a particular passion for social deduction games like <strong>Werewolf (狼人殺)</strong>.</p>
+                            <span class="interest-link">Explore the collection &amp; Werewolf roles <i class="bi bi-arrow-right"></i></span>
+                        </a>
                     </div>
                     <div class="col-md-5 reveal">
-                        <div class="card h-100 p-4 text-center">
+                        <a class="card h-100 p-4 text-center interest-card" href="movies.html">
                             <div class="text-info fs-2 mb-2"><i class="bi bi-film"></i></div>
-                            <h5>Sci-Fi &amp; Superhero Movies</h5>
-                            <p class="text-muted small mb-0">Avid viewer of science fiction cinema, deeply engaged in the <strong>Marvel Cinematic Universe</strong> and superhero blockbusters.</p>
-                        </div>
+                            <h5 class="text-white">Sci-Fi &amp; Superhero Movies</h5>
+                            <p class="text-muted small mb-3">Avid viewer of science fiction cinema, deeply engaged in the <strong>Marvel Cinematic Universe</strong> and superhero blockbusters.</p>
+                            <span class="interest-link">Open the watch list <i class="bi bi-arrow-right"></i></span>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -1033,18 +1189,80 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="small text-muted">Select the sections you want to include in your downloadable PDF CV:</p>
-                    <div class="row mb-3">
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-summary" id="t-summary" checked><label class="form-check-label" for="t-summary">Summary</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-academic" id="t-academic" checked><label class="form-check-label" for="t-academic">Academic</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-skills" id="t-skills" checked><label class="form-check-label" for="t-skills">Skills</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-projects" id="t-projects" checked><label class="form-check-label" for="t-projects">Projects</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-achievements" id="t-achievements" checked><label class="form-check-label" for="t-achievements">Awards</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-career" id="t-career" checked><label class="form-check-label" for="t-career">Career &amp; Leadership</label></div></div>
-                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-interests" id="t-interests"><label class="form-check-label" for="t-interests">Interests</label></div></div>
+                    <div class="cv-toolbar card p-3 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label class="small text-muted d-block mb-1">Template</label>
+                                <div class="btn-group btn-group-sm w-100" role="group" id="cvTemplateGroup">
+                                    <button type="button" class="btn btn-outline-primary active" data-template="classic">Classic</button>
+                                    <button type="button" class="btn btn-outline-primary" data-template="modern">Modern</button>
+                                    <button type="button" class="btn btn-outline-primary" data-template="compact">Compact</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted d-block mb-1">Text size</label>
+                                <div class="btn-group btn-group-sm w-100" role="group" id="cvScaleGroup">
+                                    <button type="button" class="btn btn-outline-primary" data-scale="0.9">Small</button>
+                                    <button type="button" class="btn btn-outline-primary active" data-scale="1">Normal</button>
+                                    <button type="button" class="btn btn-outline-primary" data-scale="1.15">Large</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="small text-muted d-block mb-1">Accent colour</label>
+                                <div class="d-flex gap-2 align-items-center" id="cvAccentGroup">
+                                    <button type="button" class="cv-swatch active" data-accent="#2563eb" style="background:#2563eb" aria-label="Blue"></button>
+                                    <button type="button" class="cv-swatch" data-accent="#7c3aed" style="background:#7c3aed" aria-label="Purple"></button>
+                                    <button type="button" class="cv-swatch" data-accent="#0f766e" style="background:#0f766e" aria-label="Teal"></button>
+                                    <button type="button" class="cv-swatch" data-accent="#b45309" style="background:#b45309" aria-label="Amber"></button>
+                                    <button type="button" class="cv-swatch" data-accent="#111827" style="background:#111827" aria-label="Monochrome"></button>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="border-secondary opacity-25 my-3">
+                        <div class="d-flex flex-wrap gap-2 align-items-center">
+                            <button class="btn btn-sm btn-outline-light" id="cvEditToggle"><i class="bi bi-pencil"></i> Edit content</button>
+                            <button class="btn btn-sm btn-outline-info" id="cvSaveBtn"><i class="bi bi-save"></i> Save my version</button>
+                            <button class="btn btn-sm btn-outline-warning" id="cvResetBtn"><i class="bi bi-arrow-counterclockwise"></i> Reset</button>
+                            <span class="small text-muted ms-auto" id="cvStatus"></span>
+                        </div>
+                    </div>
+
+                    <p class="small text-muted mb-2">
+                        Tick the sections to include. The arrows set the order used in the export.
+                    </p>
+                    <div class="mb-3" id="cvSectionList">
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-summary" id="t-summary" checked><label class="form-check-label small" for="t-summary">Summary</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-academic" id="t-academic" checked><label class="form-check-label small" for="t-academic">Academic</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-skills" id="t-skills" checked><label class="form-check-label small" for="t-skills">Skills</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-projects" id="t-projects" checked><label class="form-check-label small" for="t-projects">Projects</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-achievements" id="t-achievements" checked><label class="form-check-label small" for="t-achievements">Awards</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-career" id="t-career" checked><label class="form-check-label small" for="t-career">Career &amp; Leadership</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
+                        <div class="cv-section-row">
+                            <div class="form-check mb-0"><input class="form-check-input cv-toggle" type="checkbox" value="cv-interests" id="t-interests"><label class="form-check-label small" for="t-interests">Interests</label></div>
+                            <div><button type="button" class="cv-order-btn" data-move="up" aria-label="Move up"><i class="bi bi-chevron-up"></i></button><button type="button" class="cv-order-btn" data-move="down" aria-label="Move down"><i class="bi bi-chevron-down"></i></button></div>
+                        </div>
                     </div>
 
                     <!-- PDF Render Target Area -->
+                    <div id="cv-preview-wrap" class="cv-template-classic">
                     <div id="cv-content-target" class="cv-preview-box">
                         <h2 class="text-primary mb-1">Li Ho Wing (Rain)</h2>
                         <p class="text-dark small mb-3">Email: howing5d11@gmail.com | Phone: +852 5400 5120 | GitHub: github.com/howing-ai</p>
@@ -1080,7 +1298,7 @@
                             <h5 class="text-secondary border-bottom pb-1">Awards &amp; Credentials</h5>
                             <p class="small text-dark mb-1"><strong>Gold Prize</strong> — Virtual STEAM Education Fair (Automated Factory AI System)</p>
                             <p class="small text-dark mb-1"><strong>PolyU Engineering Project Competition</strong> — EMG-controlled Spider Bot</p>
-                            <p class="small text-dark mb-1"><strong>ABFYE 10th Anniversary Competition</strong> — Visual identity design submission</p>
+                            <p class="small text-dark mb-1"><strong>ABFYE 10th Anniversary AI Logo Challenge</strong> — Winner, University Division (logo adopted by the organiser)</p>
                             <p class="small text-dark mb-0"><strong>IELTS Academic</strong> — Band 6.5</p>
                         </div>
 
@@ -1095,9 +1313,11 @@
                             <p class="small text-dark mb-0">Board Games (Werewolf), Sci-Fi &amp; Marvel Superhero Movies, Cybersecurity Research.</p>
                         </div>
                     </div>
+                    </div>
                 </div>
                 <div class="modal-footer border-secondary">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-outline-light" id="printCvBtn"><i class="bi bi-printer"></i> Print / Save as PDF</button>
                     <button type="button" class="btn btn-primary" id="downloadPdfBtn"><i class="bi bi-download"></i> Download PDF</button>
                 </div>
             </div>
@@ -1405,38 +1625,231 @@
             updateActive();
         })();
 
-        /* ---------- CV section toggles ---------- */
-        document.querySelectorAll('.cv-toggle').forEach(toggle => {
-            toggle.addEventListener('change', function () {
-                const targetElement = document.getElementById(this.value);
-                if (targetElement) {
-                    targetElement.style.display = this.checked ? 'block' : 'none';
+        /* ---------- CV Builder ---------- */
+        (function initCvBuilder() {
+            const target = document.getElementById('cv-content-target');
+            const wrap = document.getElementById('cv-preview-wrap');
+            const sectionList = document.getElementById('cvSectionList');
+            const statusEl = document.getElementById('cvStatus');
+            if (!target || !wrap) { return; }
+
+            const STORE_KEY = 'lbw.cv.v1';
+            const DEFAULT_HTML = target.innerHTML;
+            const DEFAULT_ORDER = Array.from(target.children).map((el) => el.id).filter(Boolean);
+
+            function readStore() {
+                try { return JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }
+                catch (err) { return {}; }
+            }
+            function writeStore() {
+                try { localStorage.setItem(STORE_KEY, JSON.stringify(settings)); } catch (err) { /* storage disabled */ }
+            }
+
+            const settings = Object.assign({
+                template: 'classic',
+                scale: '1',
+                accent: '#2563eb',
+                hidden: [],
+                order: DEFAULT_ORDER.slice(),
+                content: ''
+            }, readStore());
+
+            /* Normalise a stored order so it always covers every section exactly once */
+            settings.order = DEFAULT_ORDER.filter((id) => settings.order.indexOf(id) !== -1)
+                .concat(DEFAULT_ORDER.filter((id) => settings.order.indexOf(id) === -1));
+
+            function flash(message) {
+                if (!statusEl) { return; }
+                statusEl.textContent = message;
+                clearTimeout(flash.timer);
+                flash.timer = setTimeout(() => { statusEl.textContent = ''; }, 2200);
+            }
+
+            function applyOrder() {
+                settings.order.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) { target.appendChild(el); }
+                });
+                DEFAULT_ORDER.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el && settings.order.indexOf(id) === -1) { target.appendChild(el); }
+                });
+            }
+
+            function applyLook() {
+                wrap.className = 'cv-template-' + settings.template;
+                wrap.style.setProperty('--cv-accent', settings.accent);
+                wrap.style.setProperty('--cv-scale', settings.scale);
+            }
+
+            function applyVisibility() {
+                DEFAULT_ORDER.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) { el.style.display = settings.hidden.indexOf(id) === -1 ? 'block' : 'none'; }
+                });
+                document.querySelectorAll('.cv-toggle').forEach((box) => {
+                    box.checked = settings.hidden.indexOf(box.value) === -1;
+                });
+            }
+
+            function applyAll() {
+                applyLook();
+                applyOrder();
+                applyVisibility();
+            }
+
+            /* Restore a previously saved version of the CV text */
+            if (settings.content) {
+                target.innerHTML = settings.content;
+            }
+            applyAll();
+
+            /* Template */
+            document.getElementById('cvTemplateGroup').addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-template]');
+                if (!btn) { return; }
+                settings.template = btn.dataset.template;
+                btn.parentElement.querySelectorAll('.btn').forEach((b) => b.classList.toggle('active', b === btn));
+                applyLook();
+                writeStore();
+                flash('Template: ' + settings.template);
+            });
+
+            /* Text size */
+            document.getElementById('cvScaleGroup').addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-scale]');
+                if (!btn) { return; }
+                settings.scale = btn.dataset.scale;
+                btn.parentElement.querySelectorAll('.btn').forEach((b) => b.classList.toggle('active', b === btn));
+                applyLook();
+                writeStore();
+                flash('Text size updated');
+            });
+
+            /* Accent colour */
+            document.getElementById('cvAccentGroup').addEventListener('click', (e) => {
+                const swatch = e.target.closest('[data-accent]');
+                if (!swatch) { return; }
+                settings.accent = swatch.dataset.accent;
+                swatch.parentElement.querySelectorAll('.cv-swatch').forEach((s) => s.classList.toggle('active', s === swatch));
+                applyLook();
+                writeStore();
+                flash('Accent colour updated');
+            });
+
+            /* Section toggles */
+            sectionList.addEventListener('change', (e) => {
+                const box = e.target.closest('.cv-toggle');
+                if (!box) { return; }
+                settings.hidden = box.checked
+                    ? settings.hidden.filter((id) => id !== box.value)
+                    : settings.hidden.concat([box.value]);
+                applyVisibility();
+                writeStore();
+            });
+
+            /* Move a section up or down */
+            sectionList.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-move]');
+                if (!btn) { return; }
+                const row = btn.closest('.cv-section-row');
+                const id = row.querySelector('.cv-toggle').value;
+                const index = settings.order.indexOf(id);
+                const next = btn.dataset.move === 'up' ? index - 1 : index + 1;
+                if (index === -1 || next < 0 || next >= settings.order.length) { return; }
+                settings.order.splice(index, 1);
+                settings.order.splice(next, 0, id);
+                applyOrder();
+                writeStore();
+                flash('Section moved');
+            });
+
+            /* Inline editing */
+            let editing = false;
+            const editToggle = document.getElementById('cvEditToggle');
+            editToggle.addEventListener('click', () => {
+                editing = !editing;
+                target.setAttribute('contenteditable', editing ? 'true' : 'false');
+                editToggle.classList.toggle('active', editing);
+                editToggle.innerHTML = editing
+                    ? '<i class="bi bi-check2"></i> Finish editing'
+                    : '<i class="bi bi-pencil"></i> Edit content';
+                if (!editing) {
+                    settings.content = target.innerHTML;
+                    writeStore();
+                    flash('Content saved to this browser');
+                } else {
+                    flash('Click any line to edit it');
                 }
             });
-        });
 
-        // Initialize display state on load
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.cv-toggle').forEach(toggle => {
-                const targetElement = document.getElementById(toggle.value);
-                if (targetElement) {
-                    targetElement.style.display = toggle.checked ? 'block' : 'none';
-                }
+            /* Save */
+            document.getElementById('cvSaveBtn').addEventListener('click', () => {
+                settings.content = target.innerHTML;
+                writeStore();
+                flash('Saved — it will be here next time');
             });
-        });
 
-        // Generate PDF functionality using html2pdf.js
-        document.getElementById('downloadPdfBtn').addEventListener('click', function () {
-            const element = document.getElementById('cv-content-target');
-            const opt = {
-                margin: 10,
-                filename: 'Li_Ho_Wing_CV.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().from(element).set(opt).save();
-        });
+            /* Reset */
+            document.getElementById('cvResetBtn').addEventListener('click', () => {
+                if (!window.confirm('Reset the CV builder to the original layout and content?')) { return; }
+                settings.template = 'classic';
+                settings.scale = '1';
+                settings.accent = '#2563eb';
+                settings.hidden = [];
+                settings.order = DEFAULT_ORDER.slice();
+                settings.content = '';
+                target.innerHTML = DEFAULT_HTML;
+                editing = false;
+                target.setAttribute('contenteditable', 'false');
+                editToggle.innerHTML = '<i class="bi bi-pencil"></i> Edit content';
+                document.querySelectorAll('#cvTemplateGroup .btn').forEach((b) => b.classList.toggle('active', b.dataset.template === 'classic'));
+                document.querySelectorAll('#cvScaleGroup .btn').forEach((b) => b.classList.toggle('active', b.dataset.scale === '1'));
+                document.querySelectorAll('#cvAccentGroup .cv-swatch').forEach((s) => s.classList.toggle('active', s.dataset.accent === '#2563eb'));
+                applyAll();
+                writeStore();
+                flash('Reset done');
+            });
+
+            /* Download PDF */
+            document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+                const opt = {
+                    margin: 10,
+                    filename: 'Li_Ho_Wing_CV_' + settings.template + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                };
+                html2pdf().from(target).set(opt).save();
+            });
+
+            /* Print — opens a clean, print-ready copy in a new window */
+            document.getElementById('printCvBtn').addEventListener('click', function () {
+                const printWindow = window.open('', '_blank', 'width=900,height=1100');
+                if (!printWindow) {
+                    flash('Allow pop-ups to print');
+                    return;
+                }
+                const baseSize = settings.scale === '0.9' ? '12px' : (settings.scale === '1.15' ? '15px' : '13.5px');
+                const styles = [
+                    'body{font-family:Inter,Arial,Helvetica,sans-serif;color:#1e293b;margin:28px;font-size:' + baseSize + ';line-height:1.5;}',
+                    'h2{color:' + settings.accent + ';margin:0 0 6px;font-size:1.5em;}',
+                    'h5{color:' + settings.accent + ';border-bottom:1px solid ' + settings.accent + ';padding-bottom:4px;margin:18px 0 8px;font-size:1.05em;}',
+                    'p{margin:0 0 6px;}',
+                    '.text-secondary,.text-muted{color:#475569;}',
+                    '.text-dark{color:#1e293b;}',
+                    '.small{font-size:.9em;}',
+                    '.mb-0{margin-bottom:0;}.mb-1{margin-bottom:4px;}.mb-2{margin-bottom:8px;}.mb-3{margin-bottom:14px;}',
+                    '.pb-1{padding-bottom:4px;}.border-bottom{border-bottom:1px solid ' + settings.accent + ';}',
+                    'strong{font-weight:600;}',
+                    '@page{margin:14mm;}'
+                ].join('');
+                printWindow.document.write('<!DOCTYPE html><html><head><title>Li Ho Wing (Rain) - CV</title><style>' + styles + '</style></head><body>' + target.innerHTML + '</body></html>');
+                printWindow.document.close();
+                printWindow.focus();
+                setTimeout(() => printWindow.print(), 350);
+            });
+        })();
 
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {

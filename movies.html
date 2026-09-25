@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sci-Fi &amp; Superhero Movies — Li Ho Wing (Rain)</title>
+    <meta name="description" content="Sci-fi and superhero movies watched by Li Ho Wing (Rain) — MCU Infinity Saga, Multiverse Saga, and science-fiction classics. Tick what you have watched.">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="icon" type="image/png" href="assets/profile.png">
+    <link rel="apple-touch-icon" href="assets/profile.png">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="assets/theme.css" rel="stylesheet">
+
+    <style>
+        .progress-summary .progress {
+            height: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-summary .progress-bar {
+            border-radius: 10px;
+            background: linear-gradient(90deg, #3b82f6, var(--accent));
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .toolbar .form-control {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            border-radius: 20px;
+        }
+        .toolbar .form-control:focus {
+            background: rgba(30, 41, 59, 0.95);
+            border-color: rgba(96, 165, 250, 0.5);
+            color: #e0e0e0;
+            box-shadow: none;
+        }
+        .toolbar .form-control::placeholder { color: #64748b; }
+
+        .filter-bar .btn, .bulk-btn {
+            border-radius: 20px;
+            font-size: 0.85rem;
+            padding: 0.3rem 1rem;
+        }
+
+        .group-heading {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            justify-content: space-between;
+            margin: 2.5rem 0 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .group-heading h3 {
+            font-size: 1.15rem;
+            margin: 0;
+            color: var(--accent);
+        }
+        .group-heading .count { font-size: 0.8rem; color: #94a3b8; }
+
+        .movie-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.9rem;
+            padding: 1rem 1.1rem;
+            border-radius: 12px;
+            background: rgba(30, 41, 59, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            height: 100%;
+            transition: border-color 0.25s, background 0.25s, transform 0.25s;
+        }
+        .movie-row:hover {
+            border-color: rgba(96, 165, 250, 0.3);
+            transform: translateY(-2px);
+        }
+        .movie-row.watched {
+            background: rgba(52, 211, 153, 0.07);
+            border-color: rgba(52, 211, 153, 0.3);
+        }
+        .movie-row input[type="checkbox"] {
+            width: 1.15rem;
+            height: 1.15rem;
+            margin-top: 0.2rem;
+            accent-color: #34d399;
+            cursor: pointer;
+            flex: 0 0 auto;
+        }
+        .movie-title { font-size: 0.98rem; font-weight: 600; color: #fff; margin: 0; }
+        .movie-row.watched .movie-title { color: #6ee7b7; }
+        .movie-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.8rem;
+            font-size: 0.76rem;
+            color: #94a3b8;
+            margin-top: 0.2rem;
+        }
+        .movie-note { font-size: 0.82rem; color: #cbd5e1; margin: 0.45rem 0 0; }
+        .watched-stamp {
+            font-size: 0.72rem;
+            color: #34d399;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.4rem;
+        }
+
+        .stat-pill {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 0.4rem;
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+        .stat-pill strong { font-size: 1.35rem; color: var(--accent); font-weight: 700; }
+        .stat-pill.done strong { color: #34d399; }
+
+        .empty-note { text-align: center; color: #94a3b8; font-size: 0.9rem; padding: 2rem 0; }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div id="cursor-glow"></div>
+
+    <div class="content">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold" href="index.html">Li Ho Wing (Rain)</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.html#achievements">Awards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="board-games.html">Board Games</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="movies.html">Movies</a></li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <a class="btn btn-outline-primary btn-sm" href="index.html#contact"><i class="bi bi-envelope"></i> Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <header class="page-header">
+            <div class="container">
+                <a class="back-link" href="index.html#interests"><i class="bi bi-arrow-left"></i> Back to Interests &amp; Hobbies</a>
+                <h1 class="fw-bold mb-3" style="font-size: 2.5rem;">Sci-Fi &amp; Superhero Movies</h1>
+                <p class="mx-auto text-muted" style="max-width: 700px;">
+                    My watch list across the <strong class="text-white">Marvel Cinematic Universe</strong>, superhero cinema and
+                    science fiction. Tick a film to mark it watched — the counter and progress bar update instantly.
+                    Your ticks are saved in this browser only.
+                </p>
+            </div>
+        </header>
+
+        <section class="pt-0">
+            <div class="container">
+                <div class="card p-4 progress-summary">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-3">
+                        <div class="d-flex flex-wrap gap-4">
+                            <span class="stat-pill done"><strong id="statWatched">0</strong> watched</span>
+                            <span class="stat-pill"><strong id="statTotal">0</strong> films on the list</span>
+                            <span class="stat-pill"><strong id="statRemaining">0</strong> to go</span>
+                        </div>
+                        <span class="text-muted small" id="progressLabel">0% complete</span>
+                    </div>
+                    <div class="progress" role="progressbar" aria-label="Watch progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="toolbar row g-3 align-items-center mt-4">
+                    <div class="col-lg-5">
+                        <input type="search" class="form-control" id="searchInput" placeholder="Search a title…" aria-label="Search movies">
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="d-flex flex-wrap gap-2 filter-bar" id="movieFilters">
+                            <button class="btn btn-outline-primary active" data-filter="all">All</button>
+                            <button class="btn btn-outline-primary" data-filter="watched">Watched</button>
+                            <button class="btn btn-outline-primary" data-filter="unwatched">Not watched</button>
+                            <button class="mark-btn" id="resetMovies" style="border-radius:20px;font-size:0.85rem;padding:0.3rem 1rem;">
+                                <i class="bi bi-arrow-counterclockwise"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="movieGroups"></div>
+                <p class="empty-note" id="movieEmpty" style="display:none;">No film matches this filter.</p>
+            </div>
+        </section>
+
+        <section class="pt-0">
+            <div class="container">
+                <div class="card p-4">
+                    <h4 class="text-info mb-2"><i class="bi bi-plus-circle"></i> Add a film of your own</h4>
+                    <p class="text-muted small">Anything not on the list — it is stored locally and appears in “My own list”.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="customTitle" placeholder="Title, e.g. Blade Runner 2049" aria-label="Custom movie title">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="number" class="form-control" id="customYear" placeholder="Year" min="1900" max="2100" aria-label="Custom movie year">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary w-100" id="addCustomBtn"><i class="bi bi-plus-lg"></i> Add film</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <div class="container">
+                <p class="mb-2"><a href="index.html#interests"><i class="bi bi-arrow-left"></i> Back to the portfolio</a></p>
+                <p class="mb-0 text-muted small">© 2026 Li Ho Wing (Rain). All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+    <div id="copy-toast" role="status" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+
+    <script>
+        /* =====================================================================
+           EDIT ME — the watch list.
+           group: 'mcu-infinity' | 'mcu-multiverse' | 'superhero' | 'scifi'
+           ===================================================================== */
+        const GROUPS = [
+            { id: 'mcu-infinity', label: 'MCU — The Infinity Saga', blurb: 'Phases 1–3, 2008–2019' },
+            { id: 'mcu-multiverse', label: 'MCU — The Multiverse Saga', blurb: 'Phase 4 onwards, 2021–present' },
+            { id: 'superhero', label: 'Other Superhero Cinema', blurb: 'Beyond the MCU' },
+            { id: 'scifi', label: 'Science Fiction', blurb: 'Space, time and machines' },
+            { id: 'custom', label: 'My Own List', blurb: 'Films I added myself' }
+        ];
+
+        const MOVIES = [
+            /* --- MCU: Infinity Saga --- */
+            { id: 'iron-man', title: 'Iron Man', year: 2008, group: 'mcu-infinity', runtime: 126, note: 'The film that started it all — a self-made hero with no secret identity to hide behind.' },
+            { id: 'incredible-hulk', title: 'The Incredible Hulk', year: 2008, group: 'mcu-infinity', runtime: 112, note: 'The most standalone entry in the saga.' },
+            { id: 'iron-man-2', title: 'Iron Man 2', year: 2010, group: 'mcu-infinity', runtime: 124, note: 'Introduces Black Widow and War Machine.' },
+            { id: 'thor', title: 'Thor', year: 2011, group: 'mcu-infinity', runtime: 115, note: 'Asgard, and the beginning of Loki as cinema\'s best-loved villain.' },
+            { id: 'captain-america-tfa', title: 'Captain America: The First Avenger', year: 2011, group: 'mcu-infinity', runtime: 124, note: 'A period war film disguised as a superhero origin.' },
+            { id: 'avengers', title: 'The Avengers', year: 2012, group: 'mcu-infinity', runtime: 143, note: 'The crossover gamble that reshaped blockbuster cinema.' },
+            { id: 'iron-man-3', title: 'Iron Man 3', year: 2013, group: 'mcu-infinity', runtime: 130, note: 'Tony Stark without the suit — a study of trauma and improvisation.' },
+            { id: 'thor-dark-world', title: 'Thor: The Dark World', year: 2013, group: 'mcu-infinity', runtime: 112, note: 'The quietest chapter of Phase 2.' },
+            { id: 'captain-america-winter-soldier', title: 'Captain America: The Winter Soldier', year: 2014, group: 'mcu-infinity', runtime: 136, note: 'A 1970s-style political thriller inside a superhero film.' },
+            { id: 'gotg', title: 'Guardians of the Galaxy', year: 2014, group: 'mcu-infinity', runtime: 121, note: 'Proof that unknown characters plus great music can carry a franchise.' },
+            { id: 'avengers-age-of-ultron', title: 'Avengers: Age of Ultron', year: 2015, group: 'mcu-infinity', runtime: 141, note: 'The AI-goes-wrong story, told at maximum scale.' },
+            { id: 'ant-man', title: 'Ant-Man', year: 2015, group: 'mcu-infinity', runtime: 117, note: 'A heist film with the smallest hero and the biggest laughs.' },
+            { id: 'civil-war', title: 'Captain America: Civil War', year: 2016, group: 'mcu-infinity', runtime: 147, note: 'Superheroes arguing about accountability — an Avengers film in all but name.' },
+            { id: 'doctor-strange', title: 'Doctor Strange', year: 2016, group: 'mcu-infinity', runtime: 115, note: 'Where the franchise first gets properly strange and mystical.' },
+            { id: 'gotg-vol-2', title: 'Guardians of the Galaxy Vol. 2', year: 2017, group: 'mcu-infinity', runtime: 136, note: 'A family drama with a moving father-son core.' },
+            { id: 'spiderman-homecoming', title: 'Spider-Man: Homecoming', year: 2017, group: 'mcu-infinity', runtime: 133, note: 'A teen comedy that happens to contain a superhero.' },
+            { id: 'thor-ragnarok', title: 'Thor: Ragnarok', year: 2017, group: 'mcu-infinity', runtime: 130, note: 'The reinvention that turned Thor into a comedy lead.' },
+            { id: 'black-panther', title: 'Black Panther', year: 2018, group: 'mcu-infinity', runtime: 134, note: 'World-building so strong that Wakanda became the real subject.' },
+            { id: 'infinity-war', title: 'Avengers: Infinity War', year: 2018, group: 'mcu-infinity', runtime: 149, note: 'The villain wins. Still remarkable that it worked.' },
+            { id: 'ant-man-and-the-wasp', title: 'Ant-Man and the Wasp', year: 2018, group: 'mcu-infinity', runtime: 118, note: 'A palate cleanser before the endgame.' },
+            { id: 'captain-marvel', title: 'Captain Marvel', year: 2019, group: 'mcu-infinity', runtime: 123, note: 'A 1990s-set origin that ties the saga together.' },
+            { id: 'endgame', title: 'Avengers: Endgame', year: 2019, group: 'mcu-infinity', runtime: 181, note: 'Eleven years of setup paid off in a single three-hour finale.' },
+            { id: 'spiderman-far-from-home', title: 'Spider-Man: Far From Home', year: 2019, group: 'mcu-infinity', runtime: 129, note: 'A post-snap story about inheriting a legacy.' },
+
+            /* --- MCU: Multiverse Saga --- */
+            { id: 'black-widow', title: 'Black Widow', year: 2021, group: 'mcu-multiverse', runtime: 134, note: 'A long-overdue solo outing with real family tension.' },
+            { id: 'shang-chi', title: 'Shang-Chi and the Legend of the Ten Rings', year: 2021, group: 'mcu-multiverse', runtime: 132, note: 'Martial arts choreography at the centre of a Marvel film.' },
+            { id: 'eternals', title: 'Eternals', year: 2021, group: 'mcu-multiverse', runtime: 156, note: 'The most visually ambitious and most divisive entry.' },
+            { id: 'spiderman-no-way-home', title: 'Spider-Man: No Way Home', year: 2021, group: 'mcu-multiverse', runtime: 148, note: 'Multiverse nostalgia done with actual emotional stakes.' },
+            { id: 'doctor-strange-mom', title: 'Doctor Strange in the Multiverse of Madness', year: 2022, group: 'mcu-multiverse', runtime: 126, note: 'A horror director let loose inside a superhero film.' },
+            { id: 'thor-love-and-thunder', title: 'Thor: Love and Thunder', year: 2022, group: 'mcu-multiverse', runtime: 119, note: 'Comedy and grief fighting for the same runtime.' },
+            { id: 'wakanda-forever', title: 'Black Panther: Wakanda Forever', year: 2022, group: 'mcu-multiverse', runtime: 161, note: 'A tribute and a sequel in the same film.' },
+            { id: 'quantumania', title: 'Ant-Man and the Wasp: Quantumania', year: 2023, group: 'mcu-multiverse', runtime: 125, note: 'Sets up the next big antagonist.' },
+            { id: 'gotg-vol-3', title: 'Guardians of the Galaxy Vol. 3', year: 2023, group: 'mcu-multiverse', runtime: 150, note: 'A surprisingly emotional farewell to the team.' },
+            { id: 'the-marvels', title: 'The Marvels', year: 2023, group: 'mcu-multiverse', runtime: 105, note: 'Three heroes whose powers are physically linked.' },
+            { id: 'deadpool-wolverine', title: 'Deadpool & Wolverine', year: 2024, group: 'mcu-multiverse', runtime: 128, note: 'Metafiction and fan service at full volume.' },
+            { id: 'brave-new-world', title: 'Captain America: Brave New World', year: 2025, group: 'mcu-multiverse', runtime: 118, note: 'Passing the shield to a new Captain America.' },
+            { id: 'thunderbolts', title: 'Thunderbolts*', year: 2025, group: 'mcu-multiverse', runtime: 127, note: 'A team of misfits — the MCU\'s most human ensemble in years.' },
+            { id: 'fantastic-four-first-steps', title: 'The Fantastic Four: First Steps', year: 2025, group: 'mcu-multiverse', runtime: 115, note: 'A retro-futuristic take on Marvel\'s first family.' },
+
+            /* --- Other superhero cinema --- */
+            { id: 'the-dark-knight', title: 'The Dark Knight', year: 2008, group: 'superhero', runtime: 152, note: 'Still the benchmark for a superhero film with something to say.' },
+            { id: 'watchmen', title: 'Watchmen', year: 2009, group: 'superhero', runtime: 162, note: 'Deconstructs the genre it belongs to.' },
+            { id: 'deadpool', title: 'Deadpool', year: 2016, group: 'superhero', runtime: 108, note: 'Broke the fourth wall and the R-rated box office record.' },
+            { id: 'logan', title: 'Logan', year: 2017, group: 'superhero', runtime: 137, note: 'A western about ageing, not a superhero film.' },
+            { id: 'spiderverse', title: 'Spider-Man: Into the Spider-Verse', year: 2018, group: 'superhero', runtime: 117, note: 'Animation that made every other comic-book film look static.' },
+            { id: 'the-batman', title: 'The Batman', year: 2022, group: 'superhero', runtime: 176, note: 'A detective noir with rain as a character.' },
+            { id: 'across-the-spiderverse', title: 'Spider-Man: Across the Spider-Verse', year: 2023, group: 'superhero', runtime: 140, note: 'Every frame is a different art style.' },
+
+            /* --- Science fiction --- */
+            { id: 'matrix', title: 'The Matrix', year: 1999, group: 'scifi', runtime: 136, note: 'Simulation theory, bullet time and a leather coat.' },
+            { id: 'inception', title: 'Inception', year: 2010, group: 'scifi', runtime: 148, note: 'A heist film built out of nested dream layers.' },
+            { id: 'gravity', title: 'Gravity', year: 2013, group: 'scifi', runtime: 91, note: 'Ninety minutes of tension in orbit.' },
+            { id: 'interstellar', title: 'Interstellar', year: 2014, group: 'scifi', runtime: 169, note: 'Relativity, love and a bookshelf — the film that got me into physics.' },
+            { id: 'ex-machina', title: 'Ex Machina', year: 2014, group: 'scifi', runtime: 108, note: 'A three-hander about AI, tested in a single house.' },
+            { id: 'the-martian', title: 'The Martian', year: 2015, group: 'scifi', runtime: 144, note: 'Problem solving as entertainment.' },
+            { id: 'arrival', title: 'Arrival', year: 2016, group: 'scifi', runtime: 116, note: 'Linguistics and non-linear time, told gently.' },
+            { id: 'blade-runner-2049', title: 'Blade Runner 2049', year: 2017, group: 'scifi', runtime: 164, note: 'Slow, gorgeous and quietly devastating.' },
+            { id: 'ready-player-one', title: 'Ready Player One', year: 2018, group: 'scifi', runtime: 140, note: 'Pop-culture archaeology as a plot device.' },
+            { id: 'tenet', title: 'Tenet', year: 2020, group: 'scifi', runtime: 150, note: 'Time inversion — the film demands a second viewing.' },
+            { id: 'dune', title: 'Dune', year: 2021, group: 'scifi', runtime: 155, note: 'Scale and sound design above all else.' },
+            { id: 'eeaao', title: 'Everything Everywhere All at Once', year: 2022, group: 'scifi', runtime: 139, note: 'Multiverse chaos that resolves into a family story.' },
+            { id: 'dune-part-two', title: 'Dune: Part Two', year: 2024, group: 'scifi', runtime: 166, note: 'The rare sequel that improves on the first part.' }
+        ];
+
+        const STORE_WATCHED = 'lbw.movies.watched.v1';
+        const STORE_CUSTOM = 'lbw.movies.custom.v1';
+
+        /* ---------- Background / UX (mirrors the rest of the site) ---------- */
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isTouchDevice = !window.matchMedia('(pointer: fine)').matches;
+        const isSmallScreen = window.innerWidth < 768;
+
+        let revealObserver = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof particlesJS !== 'function') { return; }
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": isSmallScreen ? 32 : 70, "density": { "enable": true, "value_area": isSmallScreen ? 500 : 800 } },
+                    "color": { "value": "#60a5fa" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.4, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": !isSmallScreen, "distance": 150, "color": "#60a5fa", "opacity": 0.2, "width": 1 },
+                    "move": { "enable": true, "speed": isSmallScreen ? 1 : 2, "direction": "none", "random": false, "straight": false, "out_mode": "out" }
+                },
+                "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": !isTouchDevice, "mode": "repulse" }, "resize": true } },
+                "retina_detect": true
+            });
+        });
+
+        (function initCursorGlow() {
+            const glow = document.getElementById('cursor-glow');
+            if (!glow || isTouchDevice || prefersReducedMotion) { return; }
+            let tx = window.innerWidth / 2, ty = window.innerHeight / 2, cx = tx, cy = ty;
+            window.addEventListener('mousemove', (e) => {
+                tx = e.clientX; ty = e.clientY; glow.style.opacity = '1';
+            }, { passive: true });
+            document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+            (function animate() {
+                cx += (tx - cx) * 0.12;
+                cy += (ty - cy) * 0.12;
+                glow.style.transform = 'translate(' + cx + 'px, ' + cy + 'px)';
+                requestAnimationFrame(animate);
+            })();
+        })();
+
+        (function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) { return; }
+            window.addEventListener('scroll', () => {
+                btn.classList.toggle('show', window.scrollY > 400);
+            }, { passive: true });
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            });
+        })();
+
+        /* ---------- Storage helpers ---------- */
+        function loadJSON(key, fallback) {
+            try {
+                const raw = localStorage.getItem(key);
+                return raw ? JSON.parse(raw) : fallback;
+            } catch (err) { return fallback; }
+        }
+        function saveJSON(key, value) {
+            try { localStorage.setItem(key, JSON.stringify(value)); } catch (err) { /* storage disabled */ }
+        }
+
+        /* ---------- Watch list ---------- */
+        (function initMovies() {
+            const groupsEl = document.getElementById('movieGroups');
+            const emptyEl = document.getElementById('movieEmpty');
+            const searchInput = document.getElementById('searchInput');
+            const filtersEl = document.getElementById('movieFilters');
+            if (!groupsEl) { return; }
+
+            let watched = loadJSON(STORE_WATCHED, {});
+            let custom = loadJSON(STORE_CUSTOM, []);
+            let filter = 'all';
+            let query = '';
+
+            function allMovies() {
+                return MOVIES.concat(custom.map((m) => ({ ...m, group: 'custom' })));
+            }
+
+            function formatStamp(ts) {
+                if (!ts || ts === true) { return ''; }
+                const d = new Date(ts);
+                return d.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+            }
+
+            function render() {
+                const list = allMovies();
+                const q = query.trim().toLowerCase();
+
+                let html = '';
+                let shownTotal = 0;
+
+                GROUPS.forEach((group) => {
+                    const movies = list
+                        .filter((m) => m.group === group.id)
+                        .filter((m) => filter === 'all'
+                            || (filter === 'watched' && watched[m.id])
+                            || (filter === 'unwatched' && !watched[m.id]))
+                        .filter((m) => !q || m.title.toLowerCase().includes(q));
+
+                    if (!movies.length) { return; }
+
+                    const groupWatched = list.filter((m) => m.group === group.id && watched[m.id]).length;
+                    const groupTotal = list.filter((m) => m.group === group.id).length;
+                    shownTotal += movies.length;
+
+                    html += `
+                        <div class="group-heading">
+                            <div>
+                                <h3>${group.label}</h3>
+                                <span class="count">${group.blurb} · ${groupWatched}/${groupTotal} watched</span>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button class="mark-btn bulk-btn" data-bulk="all" data-group="${group.id}">Mark all</button>
+                                <button class="mark-btn bulk-btn" data-bulk="none" data-group="${group.id}">Clear</button>
+                            </div>
+                        </div>
+                        <div class="row g-3">
+                            ${movies.map((m) => `
+                                <div class="col-lg-6 reveal">
+                                    <label class="movie-row ${watched[m.id] ? 'watched' : ''}" for="chk-${m.id}">
+                                        <input type="checkbox" id="chk-${m.id}" data-movie="${m.id}" ${watched[m.id] ? 'checked' : ''}>
+                                        <span class="flex-grow-1">
+                                            <span class="movie-title d-block">${m.title}</span>
+                                            <span class="movie-meta">
+                                                <span><i class="bi bi-calendar3"></i> ${m.year}</span>
+                                                ${m.runtime ? `<span><i class="bi bi-clock"></i> ${m.runtime} min</span>` : ''}
+                                                ${m.id.startsWith('custom-') ? '<span><i class="bi bi-person-plus"></i> my list</span>' : ''}
+                                            </span>
+                                            ${m.note ? `<span class="movie-note d-block">${m.note}</span>` : ''}
+                                            ${watched[m.id] ? `<span class="watched-stamp d-block"><i class="bi bi-check-circle-fill"></i> watched${formatStamp(watched[m.id]) ? ' on ' + formatStamp(watched[m.id]) : ''}</span>` : ''}
+                                        </span>
+                                    </label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                });
+
+                groupsEl.innerHTML = html;
+                emptyEl.style.display = shownTotal ? 'none' : 'block';
+                updateStats();
+                observeReveals();
+            }
+
+            function updateStats() {
+                const list = allMovies();
+                const done = list.filter((m) => watched[m.id]).length;
+                const pct = list.length ? Math.round((done / list.length) * 100) : 0;
+                document.getElementById('statWatched').textContent = done;
+                document.getElementById('statTotal').textContent = list.length;
+                document.getElementById('statRemaining').textContent = list.length - done;
+                document.getElementById('progressLabel').textContent = pct + '% complete';
+                document.getElementById('progressBar').style.width = pct + '%';
+            }
+
+            groupsEl.addEventListener('change', (e) => {
+                const box = e.target.closest('input[data-movie]');
+                if (!box) { return; }
+                if (box.checked) { watched[box.dataset.movie] = Date.now(); }
+                else { delete watched[box.dataset.movie]; }
+                saveJSON(STORE_WATCHED, watched);
+                render();
+            });
+
+            groupsEl.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-bulk]');
+                if (!btn) { return; }
+                e.preventDefault();
+                const groupId = btn.dataset.group;
+                allMovies().filter((m) => m.group === groupId).forEach((m) => {
+                    if (btn.dataset.bulk === 'all') { watched[m.id] = watched[m.id] || Date.now(); }
+                    else { delete watched[m.id]; }
+                });
+                saveJSON(STORE_WATCHED, watched);
+                render();
+            });
+
+            searchInput.addEventListener('input', () => {
+                query = searchInput.value;
+                render();
+            });
+
+            filtersEl.addEventListener('click', (e) => {
+                const btn = e.target.closest('[data-filter]');
+                if (!btn) { return; }
+                filter = btn.dataset.filter;
+                filtersEl.querySelectorAll('[data-filter]').forEach((b) => b.classList.toggle('active', b === btn));
+                render();
+            });
+
+            document.getElementById('resetMovies').addEventListener('click', () => {
+                if (!window.confirm('Clear every watched tick? Custom films you added are kept.')) { return; }
+                watched = {};
+                saveJSON(STORE_WATCHED, watched);
+                render();
+            });
+
+            document.getElementById('addCustomBtn').addEventListener('click', () => {
+                const titleEl = document.getElementById('customTitle');
+                const yearEl = document.getElementById('customYear');
+                const title = titleEl.value.trim();
+                if (!title) { titleEl.focus(); return; }
+                custom.push({
+                    id: 'custom-' + Date.now(),
+                    title: title,
+                    year: yearEl.value ? parseInt(yearEl.value, 10) : '',
+                    runtime: null,
+                    note: ''
+                });
+                saveJSON(STORE_CUSTOM, custom);
+                titleEl.value = '';
+                yearEl.value = '';
+                render();
+            });
+
+            document.getElementById('customTitle').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') { document.getElementById('addCustomBtn').click(); }
+            });
+
+            render();
+        })();
+
+        /* ---------- Scroll reveal ---------- */
+        function observeReveals() {
+            const targets = document.querySelectorAll('.reveal:not(.visible)');
+            if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+                targets.forEach((el) => el.classList.add('visible'));
+                return;
+            }
+            if (!revealObserver) {
+                revealObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+            }
+            targets.forEach((el) => revealObserver.observe(el));
+        }
+    </script>
+</body>
+</html>
