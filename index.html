@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Li Ho Wing (Rain) - Portfolio</title>
+
+    <!-- SEO & Social Sharing -->
+    <meta name="description" content="Li Ho Wing (Rain) — Interdisciplinary STEM undergraduate at HKUST. Data-driven system design, UI/UX prototyping, full-stack development and student leadership.">
+    <meta name="author" content="Li Ho Wing (Rain)">
+    <meta name="theme-color" content="#0f172a">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Li Ho Wing (Rain) - Portfolio">
+    <meta property="og:description" content="Interdisciplinary STEM Undergraduate @ HKUST — projects, skills, awards and experience.">
+    <meta property="og:image" content="assets/profile.png">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Li Ho Wing (Rain) - Portfolio">
+    <meta name="twitter:description" content="Interdisciplinary STEM Undergraduate @ HKUST — projects, skills, awards and experience.">
+    <meta name="twitter:image" content="assets/profile.png">
+
+    <!-- Favicon (uses the profile photo) -->
+    <link rel="icon" type="image/png" href="assets/profile.png">
+    <link rel="apple-touch-icon" href="assets/profile.png">
+
+    <!-- Performance: warm up the CDN connections early -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Bootstrap 5 CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --accent: #60a5fa;
+            --accent-2: #a78bfa;
+            --bg: #0f172a;
+            /* Bootstrap 5.3 maps .text-muted to --bs-secondary-color.
+               Its default (dark grey) is invisible on this dark theme, so brighten it. */
+            --bs-secondary-color: #94a3b8;
+            --bs-secondary-rgb: 148, 163, 184;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: #e0e0e0;
+            background: var(--bg);
+            overflow-x: hidden;
+        }
+        ::selection { background: rgba(96, 165, 250, 0.35); }
+
+        /* ---------- Background layers ---------- */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+        /* Mouse-follow ambient glow */
+        #cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 520px;
+            height: 520px;
+            margin: -260px 0 0 -260px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            background: radial-gradient(circle, rgba(96, 165, 250, 0.18) 0%, rgba(167, 139, 250, 0.08) 40%, rgba(96, 165, 250, 0) 68%);
+            mix-blend-mode: screen;
+            transition: opacity 0.4s ease;
+            will-change: transform;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ---------- Navbar ---------- */
+        .navbar {
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .navbar .nav-link {
+            color: #e0e0e0 !important;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .navbar .nav-link:hover, .navbar .nav-link.active {
+            color: var(--accent) !important;
+        }
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        .navbar-toggler-icon {
+            filter: invert(1) grayscale(1) brightness(2);
+        }
+
+        /* ---------- Hero ---------- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 7rem 2rem 2rem;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .profile-img-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 0 6px rgba(96, 165, 250, 0.12), 0 0 30px rgba(96, 165, 250, 0.45);
+        }
+        .profile-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.4s;
+        }
+        .profile-img-container:hover img {
+            transform: scale(1.06);
+        }
+        /* Fallback if the photo cannot be loaded */
+        .profile-img-fallback::after {
+            content: 'Rain';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--accent);
+            background: #1e293b;
+        }
+
+        /* ---------- Sections ---------- */
+        section {
+            padding: 80px 0;
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            backdrop-filter: blur(10px);
+            color: #e0e0e0;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        /* ---------- Skills ---------- */
+        .skill-badge {
+            background: rgba(96, 165, 250, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(96, 165, 250, 0.3);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 4px;
+            display: inline-block;
+        }
+        .skill-bar { margin-bottom: 18px; }
+        .skill-bar:last-child { margin-bottom: 0; }
+        .skill-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+        .skill-bar-label .pct { color: var(--accent); font-weight: 600; }
+        .skill-bar .progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .skill-bar .progress-bar {
+            width: 0;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #3b82f6, var(--accent));
+            transition: width 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        /* ---------- Course accordion list ---------- */
+        .course-item {
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .course-item:hover {
+            background: rgba(96, 165, 250, 0.05) !important;
+        }
+
+        /* ---------- Projects ---------- */
+        .project-card {
+            cursor: pointer;
+        }
+        .project-card .details-hint {
+            font-size: 0.75rem;
+            color: var(--accent);
+            opacity: 0.75;
+            transition: opacity 0.2s;
+        }
+        .project-card:hover .details-hint { opacity: 1; }
+
+        /* ---------- Achievements ---------- */
+        .achievement-card {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .achievement-icon {
+            flex: 0 0 48px;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--accent);
+            background: rgba(96, 165, 250, 0.12);
+            border: 1px solid rgba(96, 165, 250, 0.25);
+        }
+        .achievement-icon.gold {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.12);
+            border-color: rgba(251, 191, 36, 0.35);
+        }
+
+        /* ---------- Career timeline ---------- */
+        .timeline {
+            position: relative;
+            padding-left: 34px;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: 6px;
+            bottom: 6px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--accent), rgba(96, 165, 250, 0.05));
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 28px;
+        }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -31px;
+            top: 26px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--bg);
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 12px rgba(96, 165, 250, 0.8);
+        }
+        .timeline-item .card { margin: 0; }
+
+        /* ---------- Contact copy ---------- */
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0 4px;
+            font-size: 0.95rem;
+            transition: color 0.2s, transform 0.2s;
+        }
+        .copy-btn:hover { color: var(--accent-2); transform: translateY(-1px); }
+
+        /* ---------- Scroll reveal ---------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: none;
+        }
+
+        /* ---------- Hero arrow ---------- */
+        .down-arrow {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            color: var(--accent);
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-15px); }
+            60% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        /* ---------- Footer & links ---------- */
+        footer {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* ---------- Floating UI ---------- */
+        #back-to-top {
+            position: fixed;
+            right: 24px;
+            bottom: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            background: rgba(30, 41, 59, 0.9);
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s;
+            z-index: 1500;
+            backdrop-filter: blur(8px);
+        }
+        #back-to-top.show { opacity: 1; visibility: visible; transform: none; }
+        #back-to-top:hover {
+            background: var(--accent);
+            color: var(--bg);
+            border-color: var(--accent);
+        }
+        #copy-toast {
+            position: fixed;
+            left: 50%;
+            bottom: 32px;
+            transform: translate(-50%, 20px);
+            background: rgba(30, 41, 59, 0.96);
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            color: #e0e0e0;
+            padding: 10px 22px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s;
+            z-index: 2000;
+            white-space: nowrap;
+        }
+        #copy-toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        /* ---------- CV Generator Modal ---------- */
+        .cv-preview-box {
+            background: #ffffff;
+            color: #1e293b;
+            padding: 30px;
+            border-radius: 8px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /* ---------- Mobile refinements ---------- */
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background: rgba(15, 23, 42, 0.98);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 1rem;
+                margin-top: 0.75rem;
+            }
+            .hero { padding-top: 6rem; }
+        }
+        @media (max-width: 767.98px) {
+            .hero h1 { font-size: 2.1rem; }
+            .hero .lead { font-size: 1rem; }
+            .profile-img-container { width: 140px; height: 140px; }
+            section { padding: 56px 0; }
+            .section-title { font-size: 1.6rem; margin-bottom: 2rem; }
+            .card { padding: 1.25rem !important; }
+            .timeline { padding-left: 26px; }
+            .timeline-item::before { left: -25px; width: 12px; height: 12px; }
+            /* Stack the hero buttons evenly instead of letting them wrap unevenly */
+            .hero-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                max-width: 280px;
+                margin: 1.5rem auto 0;
+            }
+            .hero-actions .btn { margin: 0 !important; }
+            #cursor-glow { display: none; }
+            #back-to-top { right: 16px; bottom: 16px; width: 44px; height: 44px; }
+            #copy-toast {
+                left: 16px;
+                right: 16px;
+                transform: translateY(20px);
+                white-space: normal;
+                text-align: center;
+            }
+            #copy-toast.show { transform: translateY(0); }
+            .cv-preview-box { padding: 18px; }
+        }
+
+        /* ---------- Respect reduced motion ---------- */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
+            }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Particles Background -->
+    <div id="particles-js"></div>
+    <!-- Mouse-follow glow -->
+    <div id="cursor-glow"></div>
+
+    <div class="content">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+            <div class="container">
+                <a class="navbar-brand text-white fw-bold" href="#home">Li Ho Wing (Rain)</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#academic">Academic</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#projects">Projects</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#achievements">Awards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#career">Career</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#interests">Interests</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#personality">Personality</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                        <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#cvModal">
+                                <i class="bi bi-file-earmark-pdf"></i> CV Builder
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero position-relative">
+            <div>
+                <div class="profile-img-container">
+                    <!-- Personal photo stored locally at assets/profile.png -->
+                    <img src="assets/profile.png" alt="Li Ho Wing (Rain)" onerror="this.style.display='none'; this.parentElement.classList.add('profile-img-fallback');">
+                </div>
+                <h1>Li Ho Wing <span class="text-muted fs-4">(Rain)</span></h1>
+                <p class="lead text-info fw-semibold mb-2">Interdisciplinary STEM Undergraduate @ HKUST</p>
+                <p class="text-muted mb-4">Born: January 30, 2007</p>
+                <p class="mx-auto" style="max-width: 700px;">Passionate about data-driven system design, full-stack prototyping, cybersecurity, and solving real-world challenges through creative engineering.</p>
+                <div class="mt-4 hero-actions d-flex flex-wrap justify-content-center gap-3">
+                    <a href="#contact" class="btn btn-primary px-4 py-2">Get in Touch</a>
+                    <button class="btn btn-outline-light px-4 py-2" data-bs-toggle="modal" data-bs-target="#cvModal">Create Custom CV</button>
+                </div>
+            </div>
+            <div class="down-arrow">↓</div>
+        </section>
+
+        <!-- Academic Section -->
+        <section id="academic">
+            <div class="container">
+                <h2 class="section-title">Academic Background</h2>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4 reveal">
+                        <div class="card h-100 p-4">
+                            <div class="text-primary mb-2"><i class="bi bi-mortarboard fs-3"></i></div>
+                            <h5>University</h5>
+                            <p class="text-white mb-1"><strong>Hong Kong University of Science and Technology (HKUST)</strong></p>
+                            <p class="text-muted small mb-2">BSc in Integrative Systems and Design (2025–2029)</p>
+                            <p class="small text-secondary">Completed Year 1. Interdisciplinary engineering focus bridging software, UI/UX, and hardware prototypes.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="card h-100 p-4">
+                            <div class="text-primary mb-2"><i class="bi bi-book fs-3"></i></div>
+                            <h5>Secondary School</h5>
+                            <p class="text-white mb-1"><strong>Wong Shiu Chi Secondary School</strong></p>
+                            <p class="text-muted small mb-2">HKDSE Graduate (2025)</p>
+                            <p class="small text-secondary">Founder and Chairperson of the STEM Society; active in information and communication technology projects.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 reveal">
+                        <div class="card h-100 p-4">
+                            <div class="text-primary mb-2"><i class="bi bi-translate fs-3"></i></div>
+                            <h5>Languages & Tests</h5>
+                            <p class="text-white mb-1"><strong>IELTS Academic</strong></p>
+                            <p class="text-info fw-bold mb-2">Overall Score: 6.5</p>
+                            <p class="small text-secondary">Demonstrated high professional and academic English communication competence.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Courses Matrix -->
+                <div class="card p-4 reveal">
+                    <h4 class="mb-3 text-info"><i class="bi bi-journal-code"></i> Key Coursework</h4>
+                    <p class="text-muted small mb-3">Click on any course below to view a detailed description of the competencies gained.</p>
+                    <div class="list-group list-group-flush bg-transparent">
+                        <div class="list-group-item course-item bg-transparent text-white border-secondary" data-bs-toggle="collapse" data-bs-target="#desc1">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 text-info">ISDN / Interdisciplinary Systems & Design Core</h6>
+                                <small class="text-muted">Click to expand</small>
+                            </div>
+                            <div id="desc1" class="collapse mt-2 text-muted small">
+                                Focuses on human-centred design methodologies, rapid prototyping, and the Design, Build, Test, and Learn (DBTL) cycle to address real-world challenges.
+                            </div>
+                        </div>
+                        <div class="list-group-item course-item bg-transparent text-white border-secondary" data-bs-toggle="collapse" data-bs-target="#desc2">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 text-info">Information and Communication Technology (ICT SBA)</h6>
+                                <small class="text-muted">Click to expand</small>
+                            </div>
+                            <div id="desc2" class="collapse mt-2 text-muted small">
+                                Covered relational database management systems, ER diagrams, 3NF schema normalization, and SQL query optimizations used in production point-of-sale software.
+                            </div>
+                        </div>
+                        <div class="list-group-item course-item bg-transparent text-white border-secondary" data-bs-toggle="collapse" data-bs-target="#desc3">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1 text-info">Python Programming & Software Development</h6>
+                                <small class="text-muted">Click to expand</small>
+                            </div>
+                            <div id="desc3" class="collapse mt-2 text-muted small">
+                                Practical training in algorithmic logic, automation scripting, local proxy API integrations, and backend database connectivity.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <div class="container">
+                <h2 class="section-title">Skills & Expertise</h2>
+                <div class="row g-4">
+                    <div class="col-md-6 reveal">
+                        <div class="card h-100 p-4">
+                            <h5 class="text-info mb-4"><i class="bi bi-code-slash"></i> Technical & Engineering</h5>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>SQL &amp; Database Design</span><span class="pct">85%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="85"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Python</span><span class="pct">75%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="75"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>UI/UX Prototyping</span><span class="pct">75%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="75"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>API Integration</span><span class="pct">70%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="70"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Data Handling &amp; Analysis</span><span class="pct">65%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="65"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Raspberry Pi &amp; Hardware Prototyping</span><span class="pct">65%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="65"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Cybersecurity Fundamentals</span><span class="pct">60%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="60"></div></div>
+                            </div>
+                            <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+                                <span class="skill-badge">TryHackMe</span>
+                                <span class="skill-badge">ER Diagrams / 3NF</span>
+                                <span class="skill-badge">DBTL Cycle</span>
+                                <span class="skill-badge">Storyboarding</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 reveal">
+                        <div class="card h-100 p-4">
+                            <h5 class="text-info mb-4"><i class="bi bi-people"></i> Leadership &amp; Soft Skills</h5>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Team Coordination</span><span class="pct">85%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="85"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Project Management</span><span class="pct">80%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="80"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Public Speaking</span><span class="pct">80%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="80"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Technical Documentation</span><span class="pct">80%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="80"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Human-Centred Research</span><span class="pct">75%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="75"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Financial Administration</span><span class="pct">75%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="75"></div></div>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-bar-label"><span>Cross-Disciplinary Communication</span><span class="pct">75%</span></div>
+                                <div class="progress"><div class="progress-bar" data-width="75"></div></div>
+                            </div>
+                            <div class="mt-4 pt-3 border-top border-secondary border-opacity-25">
+                                <span class="skill-badge">Task Delegation</span>
+                                <span class="skill-badge">Budgeting</span>
+                                <span class="skill-badge">Report Writing</span>
+                                <span class="skill-badge">Feasibility Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <div class="container">
+                <h2 class="section-title">Projects &amp; Achievements</h2>
+                <p class="text-center text-muted small mb-4" style="margin-top: -2rem;">Click any project card to see the full breakdown.</p>
+                <div class="row g-4">
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="audio" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">港音留聲機 (Audio Web App)</h5>
+                                    <a href="https://github.com/howing-ai" target="_blank" class="text-light fs-5" onclick="event.stopPropagation();"><i class="bi bi-github"></i></a>
+                                </div>
+                                <p class="text-muted small mb-2">Competition Project</p>
+                                <p class="text-white mb-2">Web-based audio application built using voice synthesis tools, image generation platforms, and a local proxy API integration.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">Python</span> <span class="badge bg-secondary">API</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="spider" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">EMG-controlled Spider Robot</h5>
+                                    <a href="https://github.com/howing-ai" target="_blank" class="text-light fs-5" onclick="event.stopPropagation();"><i class="bi bi-github"></i></a>
+                                </div>
+                                <p class="text-muted small mb-2">PolyU Engineering Project Competition</p>
+                                <p class="text-white mb-2">Constructed an electromyography-driven spider robot exploring bio-signal actuation and sensor hardware integration.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">Hardware</span> <span class="badge bg-secondary">Sensors</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="factory" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">Automated Factory AI System</h5>
+                                    <span class="badge bg-warning text-dark">Gold Prize</span>
+                                </div>
+                                <p class="text-muted small mb-2">Virtual STEAM Education Fair</p>
+                                <p class="text-white mb-2">Led a team to win a Gold Prize for an automated factory project utilizing artificial intelligence to classify component datasets (~3,000 images).</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">AI / ML</span> <span class="badge bg-secondary">Leadership</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="pos" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">Point of Sale (POS) DBMS</h5>
+                                    <a href="https://github.com/howing-ai" target="_blank" class="text-light fs-5" onclick="event.stopPropagation();"><i class="bi bi-github"></i></a>
+                                </div>
+                                <p class="text-muted small mb-2">School-Based Assessment</p>
+                                <p class="text-white mb-2">Developed a fully normalized SQL database backend and POS application to streamline restaurant operation workflows.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">SQL</span> <span class="badge bg-secondary">Database Design</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="moodbox" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">MoodBox — Product Redesign</h5>
+                                    <span class="badge bg-primary">HKUST S1</span>
+                                </div>
+                                <p class="text-muted small mb-2">University Group Project</p>
+                                <p class="text-white mb-2">Redesigned a consumer product to support embedded mood detection with immersive LED feedback, delivered as a documented prototype concept.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">UI/UX</span> <span class="badge bg-secondary">Hardware</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="allergy" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">Food Allergy Restaurant System</h5>
+                                    <span class="badge bg-secondary">Concept</span>
+                                </div>
+                                <p class="text-muted small mb-2">UX + AI Concept Design</p>
+                                <p class="text-white mb-2">Designed an ordering interface with AI allergen filtering and safe-menu suggestions, plus staff training and labelling workflows.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">UX</span> <span class="badge bg-secondary">AI Concept</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="wayfinding" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">Interchange Pathfinder</h5>
+                                    <span class="badge bg-primary">HKUST S1</span>
+                                </div>
+                                <p class="text-muted small mb-2">Wayfinding Prototype</p>
+                                <p class="text-white mb-2">Designed a hybrid wayfinding solution combining touchscreen guidance with physical floor markers, backed by LED vs. sticker cost analysis.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">Design</span> <span class="badge bg-secondary">Cost Analysis</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 d-flex flex-column justify-content-between project-card" data-project="video" tabindex="0" role="button">
+                            <div>
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="text-info mb-0">Product Promotion Video</h5>
+                                    <span class="badge bg-primary">HKUST S1</span>
+                                </div>
+                                <p class="text-muted small mb-2">Media &amp; Storytelling</p>
+                                <p class="text-white mb-2">Co-developed the storyboard and filming plan, coordinated team roles on set, and edited the final cut for narrative clarity.</p>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mt-3">
+                                <div><span class="badge bg-secondary">Storyboarding</span> <span class="badge bg-secondary">Video Editing</span></div>
+                                <span class="details-hint">View details <i class="bi bi-arrow-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Achievements Section -->
+        <section id="achievements">
+            <div class="container">
+                <h2 class="section-title">Awards &amp; Credentials</h2>
+                <div class="row g-4">
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon gold"><i class="bi bi-trophy"></i></div>
+                            <div>
+                                <h5 class="text-warning mb-1">Gold Prize — Virtual STEAM Education Fair</h5>
+                                <p class="text-muted small mb-2">Future Bus Factory · Team Lead</p>
+                                <p class="text-white small mb-0">Led the team to a Gold Prize with an automated factory prototype using AI to classify a ~3,000-image component dataset.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon"><i class="bi bi-robot"></i></div>
+                            <div>
+                                <h5 class="text-info mb-1">PolyU Engineering Project Competition</h5>
+                                <p class="text-muted small mb-2">EMG-controlled Spider Bot</p>
+                                <p class="text-white small mb-0">Designed and built a bio-signal driven robot, integrating EMG sensors with motor and gear actuation mechanisms.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon"><i class="bi bi-palette"></i></div>
+                            <div>
+                                <h5 class="text-info mb-1">ABFYE 10th Anniversary Competition</h5>
+                                <p class="text-muted small mb-2">Design Submission</p>
+                                <p class="text-white small mb-0">Submitted a full visual identity package (SVG / CMYK PDF / PNG) for the ABFYE 10th Anniversary competition.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon"><i class="bi bi-translate"></i></div>
+                            <div>
+                                <h5 class="text-info mb-1">IELTS Academic — Band 6.5</h5>
+                                <p class="text-muted small mb-2">English Proficiency</p>
+                                <p class="text-white small mb-0">Certified academic English competence for university-level study and professional communication.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon"><i class="bi bi-mortarboard"></i></div>
+                            <div>
+                                <h5 class="text-info mb-1">HKDSE Graduate</h5>
+                                <p class="text-muted small mb-2">Wong Shiu Chi Secondary School</p>
+                                <p class="text-white small mb-0">Completed the Hong Kong Diploma of Secondary Education and progressed to HKUST.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 reveal">
+                        <div class="card h-100 p-4 achievement-card">
+                            <div class="achievement-icon"><i class="bi bi-search"></i></div>
+                            <div>
+                                <h5 class="text-info mb-1">Independent Research Reports</h5>
+                                <p class="text-muted small mb-2">Self-directed Study</p>
+                                <p class="text-white small mb-0">Literature review on biometric authentication (fingerprint, facial, iris, voice) and two in-depth wayfinding system analyses with cost breakdowns.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Career Section -->
+        <section id="career">
+            <div class="container">
+                <h2 class="section-title">Work &amp; Leadership Experience</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="timeline">
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">Financial Secretary</h5>
+                                        <span class="text-muted small">2025 – Present</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>Integrated Systems and Design Student Society, HKUST</strong></p>
+                                    <p class="text-muted small mb-0">Managing organizational accounts, budgeting for student activities, and collaborating on faculty-student communications.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">BSc in Integrative Systems and Design</h5>
+                                        <span class="text-muted small">2025 – 2029</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>Hong Kong University of Science and Technology</strong></p>
+                                    <p class="text-muted small mb-0">Interdisciplinary curriculum spanning design methodology, systems thinking, prototyping and engineering fundamentals.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">Founder &amp; Chairperson</h5>
+                                        <span class="text-muted small">2023 – 2024</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>STEM Society, Wong Shiu Chi Secondary School</strong></p>
+                                    <p class="text-muted small mb-0">Established the school society from scratch, organized annual STEM weeks, delegated team duties, and led public presentations.</p>
+                                </div>
+                            </div>
+                            <div class="timeline-item reveal">
+                                <div class="card p-4">
+                                    <div class="d-flex justify-content-between flex-wrap mb-2">
+                                        <h5 class="text-info mb-0">HKDSE Graduate</h5>
+                                        <span class="text-muted small">2025</span>
+                                    </div>
+                                    <p class="text-white mb-2"><strong>Wong Shiu Chi Secondary School</strong></p>
+                                    <p class="text-muted small mb-0">Completed secondary education with a focus on ICT and STEM subjects, including an ICT School-Based Assessment database project.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interests Section -->
+        <section id="interests">
+            <div class="container">
+                <h2 class="section-title">Interests &amp; Hobbies</h2>
+                <div class="row g-4 justify-content-center">
+                    <div class="col-md-5 reveal">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="text-info fs-2 mb-2"><i class="bi bi-dice-5"></i></div>
+                            <h5>Board Games</h5>
+                            <p class="text-muted small mb-0">Enthusiast of strategic tabletop games, with a particular passion for social deduction games like <strong>Werewolf (狼人殺)</strong>.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5 reveal">
+                        <div class="card h-100 p-4 text-center">
+                            <div class="text-info fs-2 mb-2"><i class="bi bi-film"></i></div>
+                            <h5>Sci-Fi &amp; Superhero Movies</h5>
+                            <p class="text-muted small mb-0">Avid viewer of science fiction cinema, deeply engaged in the <strong>Marvel Cinematic Universe</strong> and superhero blockbusters.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personality Section -->
+        <section id="personality">
+            <div class="container">
+                <h2 class="section-title">Personality &amp; Work Ethic</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8 text-center">
+                        <div class="card p-4 reveal">
+                            <p class="lead text-white mb-3">Curious, Analytical, and Action-Oriented</p>
+                            <p class="text-muted mb-0">
+                                Combines rigorous computational thinking with creative human-centred problem solving. Natural team leader who enjoys taking initiative, exploring cybersecurity fundamentals, and continuously building practical technical solutions.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <div class="container">
+                <h2 class="section-title">Contact Information</h2>
+                <div class="row justify-content-center text-center">
+                    <div class="col-lg-8">
+                        <div class="card p-4 reveal">
+                            <p class="text-muted small mb-4">Click the copy icon to copy a detail to your clipboard.</p>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1"><i class="bi bi-envelope text-info"></i> Email</p>
+                                    <a href="mailto:howing5d11@gmail.com">howing5d11@gmail.com</a>
+                                    <button class="copy-btn" data-copy="howing5d11@gmail.com" aria-label="Copy email"><i class="bi bi-clipboard"></i></button>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1"><i class="bi bi-telephone text-info"></i> Phone</p>
+                                    <span>+852 5400 5120</span>
+                                    <button class="copy-btn" data-copy="+852 5400 5120" aria-label="Copy phone"><i class="bi bi-clipboard"></i></button>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="text-muted mb-1"><i class="bi bi-discord text-info"></i> Discord ID</p>
+                                    <span>howing_ai</span>
+                                    <button class="copy-btn" data-copy="howing_ai" aria-label="Copy Discord ID"><i class="bi bi-clipboard"></i></button>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <p class="text-muted mb-1"><i class="bi bi-instagram text-info"></i> Instagram</p>
+                                    <a href="https://instagram.com/howing_ai" target="_blank" rel="noopener">@howing_ai</a>
+                                </div>
+                                <div class="col-md-6 mt-3">
+                                    <p class="text-muted mb-1"><i class="bi bi-github text-info"></i> GitHub</p>
+                                    <a href="https://github.com/howing-ai" target="_blank" rel="noopener">github.com/howing-ai</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p class="mb-0">© 2026 Li Ho Wing (Rain). All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- Back to top -->
+    <button id="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></button>
+    <!-- Copy toast -->
+    <div id="copy-toast" role="status" aria-live="polite"></div>
+
+    <!-- Project Detail Modal -->
+    <div class="modal fade" id="projectModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-info" id="pm-title"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="pm-body"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CV Builder Modal -->
+    <div class="modal fade" id="cvModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content bg-dark text-white border-secondary">
+                <div class="modal-header border-secondary">
+                    <h5 class="modal-title text-info"><i class="bi bi-file-earmark-pdf"></i> Custom CV Generator</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="small text-muted">Select the sections you want to include in your downloadable PDF CV:</p>
+                    <div class="row mb-3">
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-summary" id="t-summary" checked><label class="form-check-label" for="t-summary">Summary</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-academic" id="t-academic" checked><label class="form-check-label" for="t-academic">Academic</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-skills" id="t-skills" checked><label class="form-check-label" for="t-skills">Skills</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-projects" id="t-projects" checked><label class="form-check-label" for="t-projects">Projects</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-achievements" id="t-achievements" checked><label class="form-check-label" for="t-achievements">Awards</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-career" id="t-career" checked><label class="form-check-label" for="t-career">Career &amp; Leadership</label></div></div>
+                        <div class="col-md-4"><div class="form-check"><input class="form-check-input cv-toggle" type="checkbox" value="cv-interests" id="t-interests"><label class="form-check-label" for="t-interests">Interests</label></div></div>
+                    </div>
+
+                    <!-- PDF Render Target Area -->
+                    <div id="cv-content-target" class="cv-preview-box">
+                        <h2 class="text-primary mb-1">Li Ho Wing (Rain)</h2>
+                        <p class="text-dark small mb-3">Email: howing5d11@gmail.com | Phone: +852 5400 5120 | GitHub: github.com/howing-ai</p>
+
+                        <div id="cv-summary" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Professional Summary</h5>
+                            <p class="small text-dark mb-0">Interdisciplinary STEM undergraduate at HKUST with practical experience in data-driven system design, UI/UX prototyping, full-stack development, and student leadership.</p>
+                        </div>
+
+                        <div id="cv-academic" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Academic Education</h5>
+                            <p class="small text-dark mb-1"><strong>Hong Kong University of Science and Technology</strong> — BSc in Integrative Systems and Design (2025–2029)</p>
+                            <p class="small text-dark mb-1"><strong>Wong Shiu Chi Secondary School</strong> — HKDSE Graduate</p>
+                            <p class="small text-dark mb-0"><strong>IELTS Academic</strong>: 6.5</p>
+                        </div>
+
+                        <div id="cv-skills" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Skills</h5>
+                            <p class="small text-dark mb-0">Python, SQL, Database Normalization (3NF), Raspberry Pi, Cybersecurity Fundamentals, API Integration, UI/UX Design, Data Analysis, Project Management.</p>
+                        </div>
+
+                        <div id="cv-projects" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Projects</h5>
+                            <p class="small text-dark mb-1"><strong>港音留聲機</strong>: Web-based audio app with voice synthesis and proxy API integration.</p>
+                            <p class="small text-dark mb-1"><strong>EMG-controlled Spider Robot</strong>: Actuation and bio-signal sensor integration project.</p>
+                            <p class="small text-dark mb-1"><strong>Automated Factory AI System</strong>: Gold Prize winner for image classification dataset pipelines.</p>
+                            <p class="small text-dark mb-1"><strong>MoodBox</strong>: Product redesign with embedded mood detection and LED feedback.</p>
+                            <p class="small text-dark mb-1"><strong>Interchange Pathfinder</strong>: Hybrid wayfinding prototype with LED vs. sticker cost analysis.</p>
+                            <p class="small text-dark mb-0"><strong>POS DBMS</strong>: Fully normalized SQL backend for restaurant operations.</p>
+                        </div>
+
+                        <div id="cv-achievements" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Awards &amp; Credentials</h5>
+                            <p class="small text-dark mb-1"><strong>Gold Prize</strong> — Virtual STEAM Education Fair (Automated Factory AI System)</p>
+                            <p class="small text-dark mb-1"><strong>PolyU Engineering Project Competition</strong> — EMG-controlled Spider Bot</p>
+                            <p class="small text-dark mb-1"><strong>ABFYE 10th Anniversary Competition</strong> — Visual identity design submission</p>
+                            <p class="small text-dark mb-0"><strong>IELTS Academic</strong> — Band 6.5</p>
+                        </div>
+
+                        <div id="cv-career" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Experience &amp; Leadership</h5>
+                            <p class="small text-dark mb-1"><strong>Financial Secretary</strong> — ISD Student Society, HKUST (2025–Present)</p>
+                            <p class="small text-dark mb-0"><strong>Founder &amp; Chairperson</strong> — STEM Society, Wong Shiu Chi Secondary School (2023–2024)</p>
+                        </div>
+
+                        <div id="cv-interests" class="mb-3">
+                            <h5 class="text-secondary border-bottom pb-1">Interests</h5>
+                            <p class="small text-dark mb-0">Board Games (Werewolf), Sci-Fi &amp; Marvel Superhero Movies, Cybersecurity Research.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="downloadPdfBtn"><i class="bi bi-download"></i> Download PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Particles.js (deferred for faster first paint) -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
+    <!-- html2pdf.js for CV generation (deferred) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
+
+    <script>
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const isTouchDevice = !window.matchMedia('(pointer: fine)').matches;
+        const isSmallScreen = window.innerWidth < 768;
+
+        /* ---------- Particles background (adaptive density) ---------- */
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof particlesJS !== 'function') { return; }
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": isSmallScreen ? 32 : 80,
+                        "density": { "enable": true, "value_area": isSmallScreen ? 500 : 800 }
+                    },
+                    "color": { "value": "#60a5fa" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.4, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": !isSmallScreen, "distance": 150, "color": "#60a5fa", "opacity": 0.2, "width": 1 },
+                    "move": {
+                        "enable": true,
+                        "speed": isSmallScreen ? 1 : 2,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out"
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": { "enable": !isTouchDevice, "mode": "repulse" },
+                        "resize": true
+                    }
+                },
+                "retina_detect": true
+            });
+        });
+
+        /* ---------- Mouse-follow ambient glow ---------- */
+        (function initCursorGlow() {
+            const glow = document.getElementById('cursor-glow');
+            if (!glow || isTouchDevice || prefersReducedMotion) { return; }
+
+            let targetX = window.innerWidth / 2;
+            let targetY = window.innerHeight / 2;
+            let currentX = targetX;
+            let currentY = targetY;
+
+            window.addEventListener('mousemove', (e) => {
+                targetX = e.clientX;
+                targetY = e.clientY;
+                glow.style.opacity = '1';
+            }, { passive: true });
+
+            document.addEventListener('mouseleave', () => { glow.style.opacity = '0'; });
+
+            (function animate() {
+                currentX += (targetX - currentX) * 0.12;
+                currentY += (targetY - currentY) * 0.12;
+                glow.style.transform = 'translate(' + currentX + 'px, ' + currentY + 'px)';
+                requestAnimationFrame(animate);
+            })();
+        })();
+
+        /* ---------- Scroll reveal + animated skill bars ---------- */
+        (function initScrollEffects() {
+            const revealTargets = document.querySelectorAll('.reveal, .skill-bar .progress-bar');
+
+            if (!('IntersectionObserver' in window) || prefersReducedMotion) {
+                document.querySelectorAll('.reveal').forEach((el) => el.classList.add('visible'));
+                document.querySelectorAll('.skill-bar .progress-bar').forEach((el) => {
+                    el.style.width = el.dataset.width + '%';
+                });
+                return;
+            }
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) { return; }
+                    const el = entry.target;
+                    if (el.classList.contains('reveal')) {
+                        el.classList.add('visible');
+                    } else if (el.classList.contains('progress-bar')) {
+                        el.style.width = el.dataset.width + '%';
+                    }
+                    observer.unobserve(el);
+                });
+            }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+            revealTargets.forEach((el) => observer.observe(el));
+        })();
+
+        /* ---------- Project detail modal ---------- */
+        const projectDetails = {
+            audio: {
+                title: '港音留聲機 — Audio Web App',
+                meta: 'Competition Project · Python · API Integration',
+                body: [
+                    ['Overview', 'A web-based audio application that preserves and replays the sounds of Hong Kong, built end-to-end as a competition entry.'],
+                    ['My Contribution', 'Designed the system flow, wired the front end to a local proxy API, and integrated third-party voice synthesis plus image generation services into a single pipeline.'],
+                    ['Key Challenges', 'Handling API latency and rate limits through a local proxy layer, and keeping the interface responsive while media assets load in the background.'],
+                    ['Outcome', 'Delivered a working prototype demonstrating how generative media services can be composed into a culturally themed product experience.']
+                ],
+                tech: ['Python', 'API Integration', 'Proxy Server', 'Voice Synthesis', 'UI Design']
+            },
+            spider: {
+                title: 'EMG-controlled Spider Robot',
+                meta: 'PolyU Engineering Project Competition · Hardware',
+                body: [
+                    ['Overview', 'A spider-shaped robot driven by electromyography (EMG) signals, built for the PolyU Engineering Project Competition.'],
+                    ['My Contribution', 'Assembled the hardware platform, integrated EMG sensors with the motor driver, and explored gear ratios and leg linkage mechanisms for stable walking.'],
+                    ['Key Challenges', 'Filtering noisy bio-signals so that user intent maps to reliable motion commands, and packaging the electronics within a compact chassis.'],
+                    ['Outcome', 'Produced a functional prototype demonstrating bio-signal driven actuation, a foundation for assistive-device concepts.']
+                ],
+                tech: ['EMG Sensors', 'Motor / Gear Actuation', 'Embedded Control', 'Mechanical Assembly']
+            },
+            factory: {
+                title: 'Automated Factory AI System',
+                meta: 'Virtual STEAM Education Fair · Gold Prize · Team Lead',
+                body: [
+                    ['Overview', 'An automated factory concept using AI to classify component images, entered into the Virtual STEAM Education Fair.'],
+                    ['My Contribution', 'Led the team, coordinated task delegation, and planned the data collection pipeline for a dataset of roughly 3,000 component images.'],
+                    ['Key Challenges', 'Collecting and labelling a large dataset under pandemic restrictions, and adapting the project plan when on-site work was not possible.'],
+                    ['Outcome', 'Awarded the Gold Prize; the project built hands-on experience in dataset design, model evaluation and remote teamwork.']
+                ],
+                tech: ['AI / ML', 'Computer Vision', 'Dataset Design', 'Project Management']
+            },
+            pos: {
+                title: 'Point of Sale (POS) DBMS',
+                meta: 'School-Based Assessment · SQL & Database Design',
+                body: [
+                    ['Overview', 'An end-to-end restaurant point-of-sale database management system, from requirements analysis to a working application.'],
+                    ['My Contribution', 'Modelled the domain with ER diagrams, normalized the schema to 3NF, wrote the SQL query layer, and implemented access control and data integrity rules.'],
+                    ['Key Challenges', 'Preventing data anomalies across orders, items and staff records while keeping queries efficient.'],
+                    ['Outcome', 'A fully normalized backend that streamlines restaurant workflows, with proposed inventory and CRM extensions.']
+                ],
+                tech: ['SQL', 'ER Modelling', '3NF Normalization', 'Access Control']
+            },
+            moodbox: {
+                title: 'MoodBox — Product Redesign',
+                meta: 'HKUST · Semester 1 Group Project',
+                body: [
+                    ['Overview', 'A consumer product redesigned to support embedded mood detection with immersive LED feedback.'],
+                    ['My Contribution', 'Contributed to the AI data pipeline plan, hardware specification, and the analysis of system-level constraints.'],
+                    ['Key Challenges', 'Balancing sensor accuracy, power budget, manufacturability and user comfort within a realistic production cost.'],
+                    ['Outcome', 'A documented prototype concept that considers how the product would actually be manufactured and deployed.']
+                ],
+                tech: ['Human-Centred Design', 'AI Data Pipeline', 'Hardware Specification', 'Rapid Prototyping']
+            },
+            allergy: {
+                title: 'Food Allergy Restaurant System',
+                meta: 'UX + AI Concept Design',
+                body: [
+                    ['Overview', 'A restaurant ordering system concept designed around food allergy safety.'],
+                    ['My Contribution', 'Designed the ordering interface with AI allergen filtering and safe-menu suggestions, and mapped the front-of-house and kitchen workflows.'],
+                    ['Key Challenges', 'Making allergy information unambiguous for both customers and staff without slowing down service.'],
+                    ['Outcome', 'Proposed a service redesign including staff training and labelling workflows to improve customer safety and usability.']
+                ],
+                tech: ['UX Research', 'Interface Design', 'AI Concept', 'Service Design']
+            },
+            wayfinding: {
+                title: 'Interchange Pathfinder',
+                meta: 'HKUST · Semester 1 · Wayfinding Prototype',
+                body: [
+                    ['Overview', 'A hybrid wayfinding solution for complex interchange environments, combining touchscreen guidance with physical floor markers.'],
+                    ['My Contribution', 'Designed the navigation logic and ran a feasibility and cost analysis comparing LED lighting against colour-coded stickers.'],
+                    ['Key Challenges', 'Weighing installation time, durability, maintenance and cost against the visibility needed in a busy interchange.'],
+                    ['Outcome', 'Delivered an evidence-based hybrid implementation plan, documented in two in-depth analysis reports.']
+                ],
+                tech: ['Wayfinding Design', 'Cost-Benefit Analysis', 'Feasibility Study', 'Prototyping']
+            },
+            video: {
+                title: 'Product Promotion Video',
+                meta: 'HKUST · Semester 1 Group Project',
+                body: [
+                    ['Overview', 'A promotional video produced end-to-end by a student team.'],
+                    ['My Contribution', 'Co-developed the storyboard and filming plan, coordinated team roles during the shoot, and edited the final cut.'],
+                    ['Key Challenges', 'Keeping a clear narrative in a short runtime while working with limited equipment and a tight schedule.'],
+                    ['Outcome', 'A finished video with improved narrative clarity and emotional impact, plus practical experience in visual storytelling.']
+                ],
+                tech: ['Storyboarding', 'Video Editing', 'Team Coordination', 'Visual Communication']
+            }
+        };
+
+        (function initProjectModal() {
+            const modalEl = document.getElementById('projectModal');
+            const titleEl = document.getElementById('pm-title');
+            const bodyEl = document.getElementById('pm-body');
+            if (!modalEl) { return; }
+
+            const modal = new bootstrap.Modal(modalEl);
+
+            document.querySelectorAll('.project-card').forEach((card) => {
+                const open = () => {
+                    const data = projectDetails[card.dataset.project];
+                    if (!data) { return; }
+                    titleEl.textContent = data.title;
+                    let html = '<p class="text-muted small mb-4">' + data.meta + '</p>';
+                    data.body.forEach(([heading, text]) => {
+                        html += '<h6 class="text-info mb-2">' + heading + '</h6><p class="text-white small mb-4">' + text + '</p>';
+                    });
+                    html += '<h6 class="text-info mb-2">Tech &amp; Tools</h6><div>';
+                    data.tech.forEach((t) => { html += '<span class="skill-badge">' + t + '</span>'; });
+                    html += '</div>';
+                    bodyEl.innerHTML = html;
+                    modal.show();
+                };
+                card.addEventListener('click', open);
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        open();
+                    }
+                });
+            });
+        })();
+
+        /* ---------- Copy to clipboard with toast ---------- */
+        (function initCopyButtons() {
+            const toast = document.getElementById('copy-toast');
+            let toastTimer = null;
+
+            function showToast(message) {
+                if (!toast) { return; }
+                toast.textContent = message;
+                toast.classList.add('show');
+                clearTimeout(toastTimer);
+                toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+            }
+
+            function fallbackCopy(text) {
+                const input = document.createElement('textarea');
+                input.value = text;
+                input.setAttribute('readonly', '');
+                input.style.position = 'absolute';
+                input.style.left = '-9999px';
+                document.body.appendChild(input);
+                input.select();
+                try { document.execCommand('copy'); } catch (err) { /* no-op */ }
+                document.body.removeChild(input);
+            }
+
+            document.querySelectorAll('.copy-btn').forEach((btn) => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const text = btn.dataset.copy;
+                    if (navigator.clipboard && window.isSecureContext) {
+                        navigator.clipboard.writeText(text)
+                            .then(() => showToast('Copied: ' + text))
+                            .catch(() => { fallbackCopy(text); showToast('Copied: ' + text); });
+                    } else {
+                        fallbackCopy(text);
+                        showToast('Copied: ' + text);
+                    }
+                });
+            });
+        })();
+
+        /* ---------- Back to top ---------- */
+        (function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) { return; }
+
+            window.addEventListener('scroll', () => {
+                btn.classList.toggle('show', window.scrollY > 400);
+            }, { passive: true });
+
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+            });
+        })();
+
+        /* ---------- Nav active state on scroll ---------- */
+        (function initScrollSpy() {
+            const sections = Array.from(document.querySelectorAll('section[id]'));
+            const navLinks = Array.from(document.querySelectorAll('.navbar-nav .nav-link'));
+            if (!sections.length || !navLinks.length) { return; }
+
+            function updateActive() {
+                const offset = window.scrollY + window.innerHeight * 0.3;
+                let currentId = sections[0].id;
+                sections.forEach((section) => {
+                    if (section.offsetTop <= offset) { currentId = section.id; }
+                });
+                navLinks.forEach((link) => {
+                    link.classList.toggle('active', link.getAttribute('href') === '#' + currentId);
+                });
+            }
+
+            window.addEventListener('scroll', updateActive, { passive: true });
+            updateActive();
+        })();
+
+        /* ---------- CV section toggles ---------- */
+        document.querySelectorAll('.cv-toggle').forEach(toggle => {
+            toggle.addEventListener('change', function () {
+                const targetElement = document.getElementById(this.value);
+                if (targetElement) {
+                    targetElement.style.display = this.checked ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Initialize display state on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.cv-toggle').forEach(toggle => {
+                const targetElement = document.getElementById(toggle.value);
+                if (targetElement) {
+                    targetElement.style.display = toggle.checked ? 'block' : 'none';
+                }
+            });
+        });
+
+        // Generate PDF functionality using html2pdf.js
+        document.getElementById('downloadPdfBtn').addEventListener('click', function () {
+            const element = document.getElementById('cv-content-target');
+            const opt = {
+                margin: 10,
+                filename: 'Li_Ho_Wing_CV.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const target = document.querySelector(this.getAttribute('href'));
+                if (!target) { return; }
+                e.preventDefault();
+                target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+
+                // Collapse the mobile menu after tapping a link
+                const navCollapse = document.getElementById('navbarNav');
+                if (navCollapse && navCollapse.classList.contains('show')) {
+                    bootstrap.Collapse.getOrCreateInstance(navCollapse).hide();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
