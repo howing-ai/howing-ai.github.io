@@ -309,11 +309,13 @@
     <script>
         /* =====================================================================
            EDIT ME — the watch list.
-           group: 'mcu-infinity' | 'mcu-multiverse' | 'superhero' | 'scifi'
+           group: 'mcu-infinity' | 'mcu-multiverse' | 'mcu-tv' | 'marvel-tv' | 'superhero' | 'scifi'
            ===================================================================== */
         const GROUPS = [
             { id: 'mcu-infinity', label: 'MCU — The Infinity Saga', blurb: 'Phases 1–3, 2008–2019' },
             { id: 'mcu-multiverse', label: 'MCU — The Multiverse Saga', blurb: 'Phase 4 onwards, 2021–present' },
+            { id: 'mcu-tv', label: 'MCU — Disney+ Series', blurb: 'The Multiverse Saga on television, 2021–present' },
+            { id: 'marvel-tv', label: 'Marvel Television', blurb: 'The ABC & Netflix era, 2013–2020' },
             { id: 'superhero', label: 'Other Superhero Cinema', blurb: 'Beyond the MCU' },
             { id: 'scifi', label: 'Science Fiction', blurb: 'Space, time and machines' },
             { id: 'custom', label: 'My Own List', blurb: 'Films I added myself' }
@@ -360,6 +362,39 @@
             { id: 'brave-new-world', title: 'Captain America: Brave New World', year: 2025, group: 'mcu-multiverse', runtime: 118, note: 'Passing the shield to a new Captain America.' },
             { id: 'thunderbolts', title: 'Thunderbolts*', year: 2025, group: 'mcu-multiverse', runtime: 127, note: 'A team of misfits — the MCU\'s most human ensemble in years.' },
             { id: 'fantastic-four-first-steps', title: 'The Fantastic Four: First Steps', year: 2025, group: 'mcu-multiverse', runtime: 115, note: 'A retro-futuristic take on Marvel\'s first family.' },
+
+            /* --- MCU: Disney+ series --- */
+            { id: 'wandavision', title: 'WandaVision', year: 2021, group: 'mcu-tv', note: '9 episodes. Sitcom pastiche hiding a grief story — the first Disney+ series set the bar high.' },
+            { id: 'fatws', title: 'The Falcon and the Winter Soldier', year: 2021, group: 'mcu-tv', note: '6 episodes. Sam Wilson weighs the shield against a world that has opinions about it.' },
+            { id: 'loki', title: 'Loki (Season 1)', year: 2021, group: 'mcu-tv', note: '6 episodes. A time-crime dramedy that quietly rewrites the MCU\'s rulebook.' },
+            { id: 'what-if', title: 'What If...?', year: 2021, group: 'mcu-tv', note: '3 seasons (2021–2024), animated. The multiverse gets a sketchbook.' },
+            { id: 'hawkeye', title: 'Hawkeye', year: 2021, group: 'mcu-tv', note: '6 episodes. Christmas in New York, trick arrows, and the passing of a mantle.' },
+            { id: 'moon-knight', title: 'Moon Knight', year: 2022, group: 'mcu-tv', note: '6 episodes. Egyptian mythology and a hero who argues with himself.' },
+            { id: 'ms-marvel', title: 'Ms. Marvel', year: 2022, group: 'mcu-tv', note: '6 episodes. Kamala Khan — fan-fiction energy with a family heart.' },
+            { id: 'i-am-groot', title: 'I Am Groot', year: 2022, group: 'mcu-tv', note: '2 seasons of shorts (2022–2023). Baby Groot causes adorable chaos.' },
+            { id: 'she-hulk', title: 'She-Hulk: Attorney at Law', year: 2022, group: 'mcu-tv', note: '9 episodes. A legal comedy that breaks the fourth wall as easily as the law.' },
+            { id: 'loki-s2', title: 'Loki (Season 2)', year: 2023, group: 'mcu-tv', note: '6 episodes. Time itself starts fraying — one of the best things Marvel has made.' },
+            { id: 'secret-invasion', title: 'Secret Invasion', year: 2023, group: 'mcu-tv', note: '6 episodes. A paranoid spy thriller — Nick Fury against the Skrulls.' },
+            { id: 'echo', title: 'Echo', year: 2024, group: 'mcu-tv', note: '5 episodes. Maya Lopez\'s brutal, grounded spotlight — first Marvel Spotlight series.' },
+            { id: 'agatha', title: 'Agatha All Along', year: 2024, group: 'mcu-tv', note: '9 episodes. WandaVision\'s wickedly fun coven follow-up.' },
+            { id: 'friendly-neighborhood-spider-man', title: 'Your Friendly Neighborhood Spider-Man', year: 2025, group: 'mcu-tv', note: 'Animated. A fresh Peter Parker back at the street-level start.' },
+            { id: 'daredevil-born-again', title: 'Daredevil: Born Again', year: 2025, group: 'mcu-tv', note: '9 episodes. Matt Murdock and Wilson Fisk collide again — the Netflix era joins the MCU.' },
+            { id: 'ironheart', title: 'Ironheart', year: 2025, group: 'mcu-tv', note: '6 episodes. Riri Williams builds armour and trouble after Wakanda Forever.' },
+            { id: 'eyes-of-wakanda', title: 'Eyes of Wakanda', year: 2025, group: 'mcu-tv', note: '4 episodes, animated. Wakandan war dogs across history.' },
+
+            /* --- Marvel Television (ABC & Netflix era) --- */
+            { id: 'agents-of-shield', title: 'Agents of S.H.I.E.L.D.', year: 2013, group: 'marvel-tv', note: '7 seasons (2013–2020). Coulson\'s team outlived everyone\'s expectations.' },
+            { id: 'agent-carter', title: 'Agent Carter', year: 2015, group: 'marvel-tv', note: '2 seasons (2015–2016). Peggy Carter, the MCU\'s most underused hero, gets her own show.' },
+            { id: 'daredevil', title: 'Daredevil', year: 2015, group: 'marvel-tv', note: '3 seasons (2015–2018). The corridor fight alone justifies the whole Netflix era.' },
+            { id: 'jessica-jones', title: 'Jessica Jones', year: 2015, group: 'marvel-tv', note: '3 seasons (2015–2019). A neo-noir detective story with the genre\'s best villain.' },
+            { id: 'luke-cage', title: 'Luke Cage', year: 2016, group: 'marvel-tv', note: '2 seasons (2016–2018). Harlem, bulletproof skin and a hip-hop soundtrack.' },
+            { id: 'iron-fist', title: 'Iron Fist', year: 2017, group: 'marvel-tv', note: '2 seasons (2017–2018). Danny Rand returns to New York.' },
+            { id: 'the-defenders', title: 'The Defenders', year: 2017, group: 'marvel-tv', note: '8 episodes. The street-level heroes finally share the screen.' },
+            { id: 'the-punisher', title: 'The Punisher', year: 2017, group: 'marvel-tv', note: '2 seasons (2017–2019). Frank Castle, the most uncomfortable Marvel watch.' },
+            { id: 'inhumans', title: 'Inhumans', year: 2017, group: 'marvel-tv', note: '1 season. A royal family on the run — famously skippable.' },
+            { id: 'runaways', title: 'Runaways', year: 2017, group: 'marvel-tv', note: '3 seasons (2017–2019). Six teens, one evil-parent-shaped problem.' },
+            { id: 'cloak-dagger', title: 'Cloak & Dagger', year: 2018, group: 'marvel-tv', note: '2 seasons (2018–2019). New Orleans, two powers, one bond.' },
+            { id: 'helstrom', title: 'Helstrom', year: 2020, group: 'marvel-tv', note: '1 season. Marvel\'s brief, dark horror experiment — the era\'s quiet ending.' },
 
             /* --- Other superhero cinema --- */
             { id: 'the-dark-knight', title: 'The Dark Knight', year: 2008, group: 'superhero', runtime: 152, note: 'Still the benchmark for a superhero film with something to say.' },
